@@ -50,8 +50,9 @@ export const CosmicUniverse = () => {
           const currentMarketCap = DexScreenerService.formatMarketCap(tokenData.marketCap);
           const change = previousMarketCap > 0 ? currentMarketCap - previousMarketCap : 0;
           
-          // Check for significant changes (5k threshold)
-          if (Math.abs(change) >= 5000 && previousMarketCap > 0) {
+          // Check for significant changes (1k threshold for more sensitivity)
+          if (Math.abs(change) >= 1000 && previousMarketCap > 0) {
+            console.log('Life event triggered! Change:', change, 'Previous:', previousMarketCap, 'Current:', currentMarketCap);
             const event = {
               type: (change > 0 ? 'birth' : 'death') as 'birth' | 'death',
               id: Date.now().toString(),
@@ -66,6 +67,14 @@ export const CosmicUniverse = () => {
               duration: 5000,
             });
           }
+          
+          console.log('Market data updated:', {
+            marketCap: currentMarketCap,
+            change: change,
+            trend: DexScreenerService.determineTrend(tokenData.priceChange.h24 / 100),
+            tokenName: tokenData.baseToken.name,
+            previousMarketCap
+          });
           
           setMarketData({
             marketCap: currentMarketCap,

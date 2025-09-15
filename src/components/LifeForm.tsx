@@ -10,10 +10,12 @@ interface LifeFormProps {
 type LifeStage = 'empty' | 'forming' | 'growing' | 'mature' | 'dying' | 'dead';
 
 export const LifeForm = ({ index, lifeEvents, marketTrend }: LifeFormProps) => {
-  const [stage, setStage] = useState<LifeStage>('empty');
+  const [stage, setStage] = useState<LifeStage>(Math.random() > 0.7 ? 'forming' : 'empty'); // Some start with life
   const [energy, setEnergy] = useState(50);
 
   useEffect(() => {
+    console.log(`LifeForm ${index}: Stage changed to ${stage}, Energy: ${energy}`);
+    
     // React to life events
     const recentEvent = lifeEvents[lifeEvents.length - 1];
     if (!recentEvent) return;
@@ -21,13 +23,15 @@ export const LifeForm = ({ index, lifeEvents, marketTrend }: LifeFormProps) => {
     const timeSinceEvent = Date.now() - recentEvent.timestamp;
     if (timeSinceEvent > 5000) return; // Only react to recent events
 
-    if (recentEvent.type === 'birth' && Math.random() > 0.7) {
+    if (recentEvent.type === 'birth' && Math.random() > 0.5) { // Increased chance
+      console.log(`LifeForm ${index}: Birth event triggered!`);
       setStage('forming');
       setEnergy(Math.random() * 50 + 50);
       
       setTimeout(() => setStage('growing'), 1000);
       setTimeout(() => setStage('mature'), 3000);
     } else if (recentEvent.type === 'death' && stage !== 'empty') {
+      console.log(`LifeForm ${index}: Death event triggered!`);
       setStage('dying');
       setTimeout(() => setStage('dead'), 1500);
       setTimeout(() => setStage('empty'), 3000);
@@ -51,8 +55,11 @@ export const LifeForm = ({ index, lifeEvents, marketTrend }: LifeFormProps) => {
     switch (stage) {
       case 'empty':
         return (
-          <div className="w-16 h-16 rounded-full border-2 border-space-light opacity-30">
+          <div className="w-16 h-16 rounded-full border-2 border-space-light opacity-50 relative">
             <div className="w-full h-full rounded-full bg-gradient-to-br from-space-medium to-space-deep" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-2 h-2 bg-star-glow rounded-full animate-twinkle opacity-30" />
+            </div>
           </div>
         );
       
