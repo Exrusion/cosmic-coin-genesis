@@ -1,4 +1,4 @@
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useState, Suspense, useRef } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import { Planet3D } from "./Planet3D";
@@ -6,6 +6,7 @@ import { StarField3D } from "./StarField3D";
 import { MarketCapDisplay } from "./MarketCapDisplay";
 import { DexScreenerService } from "@/services/DexScreenerService";
 import { useToast } from "@/components/ui/use-toast";
+import { Button } from "@/components/ui/button";
 
 interface MarketData {
   marketCap: number;
@@ -18,6 +19,7 @@ interface MarketData {
 }
 
 export const CosmicUniverse3D = () => {
+  const controlsRef = useRef<any>(null);
   const { toast } = useToast();
   const [marketData, setMarketData] = useState<MarketData>({
     marketCap: 0,
@@ -146,6 +148,14 @@ export const CosmicUniverse3D = () => {
     }
   }, [planets.length]);
 
+  // Function to locate planets
+  const locatePlanets = () => {
+    if (controlsRef.current) {
+      // Reset camera to default position where planets are visible
+      controlsRef.current.reset();
+    }
+  };
+
   return (
     <div className="relative w-full h-screen overflow-hidden bg-black">
       {/* Market Cap Display - 2D Overlay */}
@@ -153,10 +163,18 @@ export const CosmicUniverse3D = () => {
         <MarketCapDisplay data={marketData} />
       </div>
       
-      {/* Instructions */}
-      <div className="absolute top-8 right-8 z-20 text-white/60 text-sm">
+      {/* Instructions and Controls */}
+      <div className="absolute top-8 right-8 z-20 text-white/60 text-sm space-y-2">
         <div>Mouse: Orbit • Scroll: Zoom • Drag: Pan</div>
         <div>Explore the 3D universe!</div>
+        <Button 
+          onClick={locatePlanets}
+          size="sm"
+          variant="outline"
+          className="text-xs bg-black/50 border-white/20 text-white hover:bg-white/10"
+        >
+          🪐 Find Planets
+        </Button>
       </div>
 
       {/* 3D Scene */}
@@ -171,6 +189,7 @@ export const CosmicUniverse3D = () => {
             far={1000}
           />
           <OrbitControls 
+            ref={controlsRef}
             enablePan={true}
             enableZoom={true}
             enableRotate={true}
