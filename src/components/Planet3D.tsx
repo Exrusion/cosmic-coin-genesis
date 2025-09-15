@@ -132,6 +132,9 @@ export const Planet3D = ({ position, index, lifeEvents, marketTrend, isNewPlanet
       
       // Keep original Y position with floating animation
       groupRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime + index) * 0.1;
+    } else if (groupRef.current) {
+      // For center planet or very close planets, just do floating animation
+      groupRef.current.position.set(position[0], position[1] + Math.sin(state.clock.elapsedTime + index) * 0.1, position[2]);
     }
     
     // Planet rotation on its axis
@@ -147,6 +150,21 @@ export const Planet3D = ({ position, index, lifeEvents, marketTrend, isNewPlanet
       ringRef.current.rotation.z += rotationSpeed * 2 * delta;
     }
   });
+
+  // Initialize group position on mount
+  useEffect(() => {
+    if (groupRef.current) {
+      if (orbitalRadius > 0.5) {
+        groupRef.current.position.set(
+          Math.cos(initialAngle) * orbitalRadius,
+          position[1],
+          Math.sin(initialAngle) * orbitalRadius
+        );
+      } else {
+        groupRef.current.position.set(position[0], position[1], position[2]);
+      }
+    }
+  }, []);
 
   const size = getSize();
 
