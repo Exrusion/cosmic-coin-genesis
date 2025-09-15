@@ -77,10 +77,11 @@ export const CosmicUniverse3D = () => {
             timestamp: new Date().toISOString()
           });
           
-          // Check for +5k increase to create new planets
-          const marketCapIncrease = currentMarketCap - lastMajorIncrease;
-          if (marketCapIncrease >= 5000 && previousMarketCap > 0) {
-            // Create new planet pointing towards market trend direction
+          // Check for +5k increase to create new planets OR -5k decrease to destroy one planet
+          const marketCapChange = currentMarketCap - lastMajorIncrease;
+          
+          if (marketCapChange >= 5000 && previousMarketCap > 0) {
+            // CREATE NEW PLANET for +$5k increase
             const trendDirection = marketData.trend === 'up' ? 1 : marketData.trend === 'down' ? -1 : 0;
             const newPlanetPosition: [number, number, number] = [
               (Math.random() - 0.5) * 20 + (trendDirection * 5),
@@ -100,7 +101,24 @@ export const CosmicUniverse3D = () => {
             
             toast({
               title: "🪐 New Planet Born!",
-              description: `+$${marketCapIncrease.toLocaleString()} market cap increase created a new world!`,
+              description: `+$${marketCapChange.toLocaleString()} market cap increase created a new world!`,
+              duration: 5000,
+            });
+          } else if (marketCapChange <= -5000 && previousMarketCap > 0) {
+            // DESTROY ONE PLANET for -$5k decrease
+            setPlanets(prev => {
+              if (prev.length > 1) { // Keep at least 1 planet
+                // Remove the most recently added planet (last in array)
+                const updatedPlanets = prev.slice(0, -1);
+                return updatedPlanets;
+              }
+              return prev;
+            });
+            setLastMajorIncrease(currentMarketCap);
+            
+            toast({
+              title: "💥 Planet Destroyed!",
+              description: `$${Math.abs(marketCapChange).toLocaleString()} market cap decrease destroyed a world!`,
               duration: 5000,
             });
           }
