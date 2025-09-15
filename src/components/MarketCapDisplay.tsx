@@ -49,11 +49,9 @@ export const MarketCapDisplay = ({ data }: MarketCapDisplayProps) => {
             data.trend === 'stable' && "bg-nebula-blue"
           )} />
           <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
-            {data.tokenSymbol ? `${data.tokenSymbol} Life Force` : 'Cosmic Life Force'}
+            LIFEOFCOIN LIFE FORCE
           </h2>
-          {data.tokenName && (
-            <p className="text-xs text-muted-foreground">{data.tokenName}</p>
-          )}
+          <p className="text-xs text-muted-foreground">LIFEOFCOIN</p>
         </div>
         
         <div className="space-y-3">
