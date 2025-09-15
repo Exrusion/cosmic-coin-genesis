@@ -293,7 +293,7 @@ export const CosmicUniverse3D = () => {
       <Canvas 
         className="w-full h-full" 
         style={{ background: 'radial-gradient(ellipse at center, #0a0a0a 0%, #000000 70%, #000000 100%)' }}
-        camera={{ position: [0, 8, 20], fov: 60, near: 0.1, far: 1000 }}
+        camera={{ position: [0, 5, 15], fov: 75, near: 0.1, far: 1000 }}
       >
         <Suspense fallback={null}>
           {/* Controls */}
@@ -333,6 +333,12 @@ export const CosmicUniverse3D = () => {
               isNewPlanet={planet.isNew}
             />
           ))}
+          
+          {/* Debug: Add a bright reference sphere at origin */}
+          <mesh position={[0, 0, 0]}>
+            <sphereGeometry args={[0.5, 32, 32]} />
+            <meshBasicMaterial color="#ff0000" transparent opacity={0.8} />
+          </mesh>
 
           {/* Nebula effects */}
           <mesh position={[0, 0, -20]} rotation={[0, 0, 0]}>

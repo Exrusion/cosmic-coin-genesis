@@ -40,6 +40,11 @@ export const Planet3D = ({ position, index, lifeEvents, marketTrend, isNewPlanet
   const orbitalRadius = Math.sqrt(position[0] ** 2 + position[2] ** 2);
   const orbitalSpeed = (0.1 + Math.random() * 0.2) / Math.max(orbitalRadius, 1); // Slower for distant planets
   const initialAngle = Math.atan2(position[2], position[0]);
+  
+  // Debug: Log planet positions
+  useEffect(() => {
+    console.log(`Planet ${index} positioned at:`, position, `Type: ${planetType}, Stage: ${stage}`);
+  }, [position, index, planetType, stage]);
 
   // Auto-evolve new planets to show textures immediately
   useEffect(() => {
