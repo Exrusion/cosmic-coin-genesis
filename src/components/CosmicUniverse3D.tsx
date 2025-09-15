@@ -116,9 +116,12 @@ export const CosmicUniverse3D = () => {
               isNew: false
             }));
             setPlanets(initialPlanets);
-            setTotalPlanetsBorn(targetPlanetCount); // Reset total to match current market cap
+            setTotalPlanetsBorn(targetPlanetCount); // Reset total to match new token's market cap
+            setPreviousMarketCap(0); // Reset previous market cap for new token
             
-            console.log('Reset planets for token switch:', {
+            console.log('Reset planets for new token:', {
+              tokenName: tokenData.baseToken.name,
+              tokenSymbol: tokenData.baseToken.symbol,
               targetPlanetCount,
               totalBorn: targetPlanetCount
             });
