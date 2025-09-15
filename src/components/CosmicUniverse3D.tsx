@@ -8,6 +8,7 @@ import { CosmicAudio } from "./CosmicAudio";
 import { DexScreenerService } from "@/services/DexScreenerService";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
+import { TOKEN_CONFIG } from "@/config/token";
 
 interface MarketData {
   marketCap: number;
@@ -68,7 +69,7 @@ export const CosmicUniverse3D = () => {
   };
   
   // DexScreener URL tracking
-  const TRACKED_URL = "https://dexscreener.com/solana/8neuca8lrrzg6k8jwwf3o4f2tsemyj3ennib1c3kvpme";
+  const TRACKED_URL = TOKEN_CONFIG.url;
   const TOKEN_ADDRESS = DexScreenerService.parseTokenAddress(TRACKED_URL);
 
   // Fetch real token data
@@ -97,8 +98,8 @@ export const CosmicUniverse3D = () => {
             timestamp: new Date().toISOString()
           });
           
-          // Calculate correct number of planets based on market cap ($5k per planet)
-          const targetPlanetCount = Math.max(1, Math.floor(currentMarketCap / 5000));
+          // Calculate correct number of planets based on market cap
+          const targetPlanetCount = Math.max(1, Math.floor(currentMarketCap / TOKEN_CONFIG.dollarsPerPlanet));
           const currentPlanetCount = planets.length;
           
           console.log('Planet Count Logic:', {
@@ -172,7 +173,7 @@ export const CosmicUniverse3D = () => {
           }
           
           // Regular life events for existing planets
-          if (Math.abs(change) >= 1000 && previousMarketCap > 0) {
+          if (Math.abs(change) >= TOKEN_CONFIG.lifeEventThreshold && previousMarketCap > 0) {
             console.log('Life event triggered! Change:', change, 'Previous:', previousMarketCap, 'Current:', currentMarketCap);
             const event = {
               type: (change > 0 ? 'birth' : 'death') as 'birth' | 'death',
