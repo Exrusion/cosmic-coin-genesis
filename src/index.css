@@ -8,24 +8,24 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Cosmic Universe Theme */
-    --background: 220 20% 8%;
-    --foreground: 240 10% 85%;
+    /* Cosmic Universe Theme - Deep Black */
+    --background: 0 0% 2%;
+    --foreground: 240 10% 90%;
 
-    --card: 220 25% 12%;
-    --card-foreground: 240 10% 85%;
+    --card: 0 0% 4%;
+    --card-foreground: 240 10% 90%;
 
-    --popover: 220 25% 12%;
-    --popover-foreground: 240 10% 85%;
+    --popover: 0 0% 4%;
+    --popover-foreground: 240 10% 90%;
 
     --primary: 280 80% 60%;
     --primary-foreground: 240 10% 95%;
 
-    --secondary: 240 15% 15%;
+    --secondary: 240 10% 8%;
     --secondary-foreground: 240 10% 85%;
 
-    --muted: 240 15% 15%;
-    --muted-foreground: 240 5% 60%;
+    --muted: 240 10% 8%;
+    --muted-foreground: 240 5% 65%;
 
     --accent: 260 70% 50%;
     --accent-foreground: 240 10% 95%;
@@ -39,10 +39,10 @@ All colors MUST be HSL.
 
     --radius: 0.75rem;
 
-    /* Cosmic Color Palette */
-    --space-deep: 220 30% 6%;
-    --space-medium: 230 25% 12%;
-    --space-light: 240 20% 18%;
+    /* Cosmic Color Palette - Deep Black Space */
+    --space-deep: 0 0% 0%;
+    --space-medium: 240 10% 3%;
+    --space-light: 240 8% 6%;
     
     /* Life Creation Colors */
     --life-birth: 140 80% 60%;
@@ -60,17 +60,17 @@ All colors MUST be HSL.
     --nebula-pink: 320 60% 60%;
     --star-glow: 50 100% 80%;
     
-    /* Gradients */
-    --gradient-cosmic: linear-gradient(135deg, hsl(var(--space-deep)), hsl(var(--nebula-purple)), hsl(var(--space-medium)));
+    /* Gradients - Deep Black Space */
+    --gradient-cosmic: linear-gradient(135deg, hsl(var(--space-deep)), hsl(var(--nebula-purple) / 0.3), hsl(var(--space-medium)));
     --gradient-life: linear-gradient(90deg, hsl(var(--life-birth)), hsl(var(--life-growth)), hsl(var(--life-energy)));
     --gradient-death: linear-gradient(90deg, hsl(var(--death-fire)), hsl(var(--death-explosion)), hsl(var(--death-void)));
-    --gradient-nebula: radial-gradient(ellipse at center, hsl(var(--nebula-purple) / 0.3), hsl(var(--nebula-blue) / 0.2), transparent);
+    --gradient-nebula: radial-gradient(ellipse at center, hsl(var(--nebula-purple) / 0.2), hsl(var(--nebula-blue) / 0.1), transparent);
 
-    --sidebar-background: 220 25% 10%;
-    --sidebar-foreground: 240 10% 80%;
+    --sidebar-background: 0 0% 3%;
+    --sidebar-foreground: 240 10% 85%;
     --sidebar-primary: 280 80% 60%;
     --sidebar-primary-foreground: 240 10% 95%;
-    --sidebar-accent: 240 15% 15%;
+    --sidebar-accent: 240 10% 6%;
     --sidebar-accent-foreground: 240 10% 85%;
     --sidebar-border: 240 15% 20%;
     --sidebar-ring: 280 80% 60%;
