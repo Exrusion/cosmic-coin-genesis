@@ -37,15 +37,25 @@ export const CosmicUniverse3D = () => {
   
   const [lifeEvents, setLifeEvents] = useState<{ type: 'birth' | 'death', id: string, timestamp: number }[]>([]);
   const [previousMarketCap, setPreviousMarketCap] = useState<number>(0);
-  const [planets, setPlanets] = useState<{ position: [number, number, number], id: string, isNew?: boolean, createdAt?: number }[]>(() => {
-    // Initialize with planets immediately to avoid empty state
-    return initialPlanetPositions.map((position, index) => ({
-      position,
-      id: `initial-planet-${index}`,
-      isNew: false
-    }));
-  });
+  const [planets, setPlanets] = useState<{ position: [number, number, number], id: string, isNew?: boolean, createdAt?: number }[]>([]);
   const [lastMajorIncrease, setLastMajorIncrease] = useState<number>(0);
+
+  // Generate planet positions in a spiral pattern for large numbers
+  const generatePlanetPositions = (count: number): [number, number, number][] => {
+    const positions: [number, number, number][] = [];
+    const spiralArm = 2 * Math.PI / Math.max(count, 1);
+    
+    for (let i = 0; i < count; i++) {
+      const angle = i * spiralArm;
+      const radius = 3 + (i * 0.8); // Start at radius 3, increase by 0.8 per planet
+      const x = Math.cos(angle) * radius;
+      const z = Math.sin(angle) * radius;
+      const y = (Math.random() - 0.5) * 4; // Random Y between -2 and 2
+      positions.push([x, y, z]);
+    }
+    
+    return positions;
+  };
   
   // DexScreener URL tracking
   const TRACKED_URL = "https://dexscreener.com/solana/fxksrhfikhka1pkpdehbdx3yxtdnjheqwnumdlrvzkwx";
@@ -77,50 +87,58 @@ export const CosmicUniverse3D = () => {
             timestamp: new Date().toISOString()
           });
           
-          // Check for +5k increase to create new planets OR -5k decrease to destroy one planet
-          const marketCapChange = currentMarketCap - lastMajorIncrease;
+          // Calculate correct number of planets based on market cap ($5k per planet)
+          const targetPlanetCount = Math.max(1, Math.floor(currentMarketCap / 5000));
+          const currentPlanetCount = planets.length;
           
-          if (marketCapChange >= 5000 && previousMarketCap > 0) {
-            // CREATE NEW PLANET for +$5k increase
-            const trendDirection = marketData.trend === 'up' ? 1 : marketData.trend === 'down' ? -1 : 0;
-            const newPlanetPosition: [number, number, number] = [
-              (Math.random() - 0.5) * 20 + (trendDirection * 5),
-              (Math.random() - 0.5) * 10,
-              (Math.random() - 0.5) * 20 + (trendDirection * 3)
-            ];
-            
-            const newPlanet = {
-              position: newPlanetPosition,
-              id: `planet-${Date.now()}`,
-              isNew: true,
-              createdAt: Date.now()
-            };
-            
-            setPlanets(prev => [...prev, newPlanet]);
-            setLastMajorIncrease(currentMarketCap);
-            
-            toast({
-              title: "🪐 New Planet Born!",
-              description: `+$${marketCapChange.toLocaleString()} market cap increase created a new world!`,
-              duration: 5000,
-            });
-          } else if (marketCapChange <= -5000 && previousMarketCap > 0) {
-            // DESTROY ONE PLANET for -$5k decrease
-            setPlanets(prev => {
-              if (prev.length > 1) { // Keep at least 1 planet
-                // Remove the most recently added planet (last in array)
-                const updatedPlanets = prev.slice(0, -1);
-                return updatedPlanets;
-              }
-              return prev;
-            });
-            setLastMajorIncrease(currentMarketCap);
-            
-            toast({
-              title: "💥 Planet Destroyed!",
-              description: `$${Math.abs(marketCapChange).toLocaleString()} market cap decrease destroyed a world!`,
-              duration: 5000,
-            });
+          console.log('Planet Count Logic:', {
+            marketCap: currentMarketCap,
+            targetPlanets: targetPlanetCount,
+            currentPlanets: currentPlanetCount
+          });
+          
+          // Adjust planet count to match market cap
+          if (targetPlanetCount !== currentPlanetCount) {
+            if (targetPlanetCount > currentPlanetCount) {
+              // ADD planets
+              const planetsToAdd = targetPlanetCount - currentPlanetCount;
+              const newPositions = generatePlanetPositions(targetPlanetCount).slice(currentPlanetCount);
+              const newPlanets = newPositions.map((position, index) => ({
+                position,
+                id: `planet-${Date.now()}-${index}`,
+                isNew: true,
+                createdAt: Date.now()
+              }));
+              
+              setPlanets(prev => [...prev, ...newPlanets]);
+              
+              toast({
+                title: "🪐 New Planets Born!",
+                description: `Market cap $${currentMarketCap.toLocaleString()} = ${targetPlanetCount} planets (+${planetsToAdd})`,
+                duration: 5000,
+              });
+            } else {
+              // REMOVE planets
+              const planetsToRemove = currentPlanetCount - targetPlanetCount;
+              setPlanets(prev => prev.slice(0, targetPlanetCount));
+              
+              toast({
+                title: "💥 Planets Destroyed!",
+                description: `Market cap $${currentMarketCap.toLocaleString()} = ${targetPlanetCount} planets (-${planetsToRemove})`,
+                duration: 5000,
+              });
+            }
+          }
+          
+          // Initialize planets on first load if empty
+          if (planets.length === 0 && targetPlanetCount > 0) {
+            const positions = generatePlanetPositions(targetPlanetCount);
+            const initialPlanets = positions.map((position, index) => ({
+              position,
+              id: `initial-planet-${index}`,
+              isNew: false
+            }));
+            setPlanets(initialPlanets);
           }
           
           // Regular life events for existing planets
