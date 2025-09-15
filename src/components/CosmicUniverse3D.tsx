@@ -19,6 +19,13 @@ interface MarketData {
   priceChange24h?: number;
 }
 
+// Initial planet positions in 3D space
+const initialPlanetPositions: [number, number, number][] = [
+  [-8, 2, -5], [0, 3, -8], [8, 1, -5],
+  [-6, -1, 0], [0, 0, 0], [6, 2, 0],
+  [-4, 1, 5], [2, -2, 8], [7, 0, 6]
+];
+
 export const CosmicUniverse3D = () => {
   const controlsRef = useRef<any>(null);
   const { toast } = useToast();
@@ -30,7 +37,14 @@ export const CosmicUniverse3D = () => {
   
   const [lifeEvents, setLifeEvents] = useState<{ type: 'birth' | 'death', id: string, timestamp: number }[]>([]);
   const [previousMarketCap, setPreviousMarketCap] = useState<number>(0);
-  const [planets, setPlanets] = useState<{ position: [number, number, number], id: string, isNew?: boolean, createdAt?: number }[]>([]);
+  const [planets, setPlanets] = useState<{ position: [number, number, number], id: string, isNew?: boolean, createdAt?: number }[]>(() => {
+    // Initialize with planets immediately to avoid empty state
+    return initialPlanetPositions.map((position, index) => ({
+      position,
+      id: `initial-planet-${index}`,
+      isNew: false
+    }));
+  });
   const [lastMajorIncrease, setLastMajorIncrease] = useState<number>(0);
   
   // DexScreener URL tracking
@@ -139,25 +153,6 @@ export const CosmicUniverse3D = () => {
     
     return () => clearInterval(interval);
   }, [TOKEN_ADDRESS, previousMarketCap, toast]);
-
-  // Initial planet positions in 3D space
-  const initialPlanetPositions: [number, number, number][] = [
-    [-8, 2, -5], [0, 3, -8], [8, 1, -5],
-    [-6, -1, 0], [0, 0, 0], [6, 2, 0],
-    [-4, 1, 5], [2, -2, 8], [7, 0, 6]
-  ];
-
-  // Initialize planets on first load
-  useEffect(() => {
-    if (planets.length === 0) {
-      const initialPlanets = initialPlanetPositions.map((position, index) => ({
-        position,
-        id: `initial-planet-${index}`,
-        isNew: false
-      }));
-      setPlanets(initialPlanets);
-    }
-  }, [planets.length]);
 
   // Remove "new" status after 30 seconds
   useEffect(() => {
