@@ -3,51 +3,100 @@ import { StarField } from "./StarField";
 import { LifeForm } from "./LifeForm";
 import { MarketCapDisplay } from "./MarketCapDisplay";
 import { ParticleSystem } from "./ParticleSystem";
+import { DexScreenerService } from "@/services/DexScreenerService";
+import { useToast } from "@/components/ui/use-toast";
 
 interface MarketData {
   marketCap: number;
   change: number;
   trend: 'up' | 'down' | 'stable';
+  tokenName?: string;
+  tokenSymbol?: string;
+  price?: string;
+  priceChange24h?: number;
 }
 
 export const CosmicUniverse = () => {
+  const { toast } = useToast();
   const [marketData, setMarketData] = useState<MarketData>({
-    marketCap: 45000,
+    marketCap: 0,
     change: 0,
     trend: 'stable'
   });
   
   const [lifeEvents, setLifeEvents] = useState<{ type: 'birth' | 'death', id: string, timestamp: number }[]>([]);
+  const [previousMarketCap, setPreviousMarketCap] = useState<number>(0);
+  
+  // DexScreener URL tracking
+  const TRACKED_URL = "https://dexscreener.com/solana/fs9et2zacvw3nn3a8a1wn5acifgkbudcuvwgynjs2fag";
+  const TOKEN_ADDRESS = DexScreenerService.parseTokenAddress(TRACKED_URL);
 
-  // Simulate market changes for demo
+  // Fetch real token data
   useEffect(() => {
-    const interval = setInterval(() => {
-      const change = (Math.random() - 0.5) * 10000; // Random change between -5k and +5k
-      const newMarketCap = Math.max(10000, marketData.marketCap + change);
-      
-      let trend: 'up' | 'down' | 'stable' = 'stable';
-      if (Math.abs(change) >= 5000) {
-        trend = change > 0 ? 'up' : 'down';
-        
-        // Trigger life event
-        const event = {
-          type: (change > 0 ? 'birth' : 'death') as 'birth' | 'death',
-          id: Date.now().toString(),
-          timestamp: Date.now()
-        };
-        
-        setLifeEvents(prev => [...prev.slice(-10), event]); // Keep last 10 events
+    const fetchTokenData = async () => {
+      if (!TOKEN_ADDRESS) {
+        toast({
+          title: "Error",
+          description: "Invalid token address",
+          variant: "destructive",
+        });
+        return;
       }
-      
-      setMarketData({
-        marketCap: newMarketCap,
-        change,
-        trend
-      });
-    }, 3000);
 
+      try {
+        const tokenData = await DexScreenerService.getTokenData(TOKEN_ADDRESS);
+        
+        if (tokenData) {
+          const currentMarketCap = DexScreenerService.formatMarketCap(tokenData.marketCap);
+          const change = previousMarketCap > 0 ? currentMarketCap - previousMarketCap : 0;
+          
+          // Check for significant changes (5k threshold)
+          if (Math.abs(change) >= 5000 && previousMarketCap > 0) {
+            const event = {
+              type: (change > 0 ? 'birth' : 'death') as 'birth' | 'death',
+              id: Date.now().toString(),
+              timestamp: Date.now()
+            };
+            
+            setLifeEvents(prev => [...prev.slice(-10), event]);
+            
+            toast({
+              title: change > 0 ? "🌟 Life Created!" : "💥 Life Destroyed!",
+              description: `Market cap changed by ${change > 0 ? '+' : ''}$${Math.abs(change).toLocaleString()}`,
+              duration: 5000,
+            });
+          }
+          
+          setMarketData({
+            marketCap: currentMarketCap,
+            change: change,
+            trend: DexScreenerService.determineTrend(tokenData.priceChange.h24 / 100),
+            tokenName: tokenData.baseToken.name,
+            tokenSymbol: tokenData.baseToken.symbol,
+            price: parseFloat(tokenData.priceUsd).toFixed(6),
+            priceChange24h: tokenData.priceChange.h24
+          });
+          
+          setPreviousMarketCap(currentMarketCap);
+        }
+      } catch (error) {
+        console.error('Error fetching token data:', error);
+        toast({
+          title: "Connection Error",
+          description: "Failed to fetch live data. Retrying...",
+          variant: "destructive",
+        });
+      }
+    };
+
+    // Initial fetch
+    fetchTokenData();
+    
+    // Poll every 30 seconds for updates
+    const interval = setInterval(fetchTokenData, 30000);
+    
     return () => clearInterval(interval);
-  }, [marketData.marketCap]);
+  }, [TOKEN_ADDRESS, previousMarketCap, toast]);
 
   return (
     <div className="relative w-full h-screen overflow-hidden bg-black">

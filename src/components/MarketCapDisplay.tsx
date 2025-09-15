@@ -5,6 +5,10 @@ interface MarketData {
   marketCap: number;
   change: number;
   trend: 'up' | 'down' | 'stable';
+  tokenName?: string;
+  tokenSymbol?: string;
+  price?: string;
+  priceChange24h?: number;
 }
 
 interface MarketCapDisplayProps {
@@ -45,13 +49,30 @@ export const MarketCapDisplay = ({ data }: MarketCapDisplayProps) => {
             data.trend === 'stable' && "bg-nebula-blue"
           )} />
           <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
-            Cosmic Life Force
+            {data.tokenSymbol ? `${data.tokenSymbol} Life Force` : 'Cosmic Life Force'}
           </h2>
+          {data.tokenName && (
+            <p className="text-xs text-muted-foreground">{data.tokenName}</p>
+          )}
         </div>
         
-        <div className="space-y-2">
-          <div className="text-3xl font-bold text-foreground animate-float">
-            {formatMarketCap(data.marketCap)}
+        <div className="space-y-3">
+          {data.price && (
+            <div className="text-lg font-semibold text-foreground">
+              ${data.price}
+              {data.priceChange24h !== undefined && (
+                <span className={cn(
+                  "ml-2 text-sm",
+                  data.priceChange24h >= 0 ? "text-life-birth" : "text-death-fire"
+                )}>
+                  ({data.priceChange24h >= 0 ? '+' : ''}{data.priceChange24h.toFixed(2)}%)
+                </span>
+              )}
+            </div>
+          )}
+          
+          <div className="text-2xl font-bold text-foreground animate-float">
+            {data.marketCap > 0 ? formatMarketCap(data.marketCap) : 'Loading...'}
           </div>
           
           <div className={cn(
