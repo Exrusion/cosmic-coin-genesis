@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { StarField } from "./StarField";
-import { LifeForm } from "./LifeForm";
+import { Planet } from "./Planet";
 import { MarketCapDisplay } from "./MarketCapDisplay";
 import { ParticleSystem } from "./ParticleSystem";
 import { DexScreenerService } from "@/services/DexScreenerService";
@@ -121,11 +121,11 @@ export const CosmicUniverse = () => {
         <MarketCapDisplay data={marketData} />
       </div>
       
-      {/* Life Forms Container */}
+      {/* Planets Container */}
       <div className="absolute inset-0 flex items-center justify-center z-10">
-        <div className="grid grid-cols-3 gap-16">
+        <div className="grid grid-cols-3 gap-20">
           {Array.from({ length: 9 }).map((_, index) => (
-            <LifeForm
+            <Planet
               key={index}
               index={index}
               lifeEvents={lifeEvents}

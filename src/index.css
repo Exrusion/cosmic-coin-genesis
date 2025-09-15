@@ -65,6 +65,14 @@ All colors MUST be HSL.
     --gradient-life: linear-gradient(90deg, hsl(var(--life-birth)), hsl(var(--life-growth)), hsl(var(--life-energy)));
     --gradient-death: linear-gradient(90deg, hsl(var(--death-fire)), hsl(var(--death-explosion)), hsl(var(--death-void)));
     --gradient-nebula: radial-gradient(ellipse at center, hsl(var(--nebula-purple) / 0.05), hsl(var(--nebula-blue) / 0.03), transparent);
+    
+    /* Planet Gradients */
+    --planet-earth: radial-gradient(circle at 30% 30%, #4a90e2, #2e5e8a, #1a3a5c, #0d1f3a);
+    --planet-mars: radial-gradient(circle at 30% 30%, #cd5c5c, #a0522d, #8b4513, #654321);
+    --planet-venus: radial-gradient(circle at 30% 30%, #ffc649, #ff9500, #e67e22, #d35400);
+    --planet-gas: radial-gradient(circle at 30% 30%, #f39c12, #e67e22, #d35400, #a04000);
+    --planet-ice: radial-gradient(circle at 30% 30%, #85c1e9, #5dade2, #3498db, #2980b9);
+    --planet-volcanic: radial-gradient(circle at 30% 30%, #e74c3c, #c0392b, #a93226, #922b21);
 
     --sidebar-background: 0 0% 3%;
     --sidebar-foreground: 240 10% 85%;

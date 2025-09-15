@@ -87,6 +87,13 @@ export default {
         'life': 'var(--gradient-life)',
         'death': 'var(--gradient-death)',
         'nebula': 'var(--gradient-nebula)',
+        // Planet textures
+        'planet-earth': 'var(--planet-earth)',
+        'planet-mars': 'var(--planet-mars)',
+        'planet-venus': 'var(--planet-venus)',
+        'planet-gas': 'var(--planet-gas)',
+        'planet-ice': 'var(--planet-ice)',
+        'planet-volcanic': 'var(--planet-volcanic)',
       },
       borderRadius: {
         lg: "var(--radius)",
