@@ -4,6 +4,7 @@ import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import { Planet3D } from "./Planet3D";
 import { StarField3D } from "./StarField3D";
 import { MarketCapDisplay } from "./MarketCapDisplay";
+import { CosmicAudio } from "./CosmicAudio";
 import { DexScreenerService } from "@/services/DexScreenerService";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
@@ -270,6 +271,9 @@ export const CosmicUniverse3D = () => {
           </mesh>
         </Suspense>
       </Canvas>
+      
+      {/* Cosmic Audio System */}
+      <CosmicAudio marketTrend={marketData.trend} />
     </div>
   );
 };
