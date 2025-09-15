@@ -275,7 +275,7 @@ export const CosmicUniverse3D = () => {
             🪐 Find Planets
           </Button>
           <Button 
-            onClick={() => window.open('https://x.com', '_blank')}
+            onClick={() => window.open('https://x.com/i/communities/1967657065889063031', '_blank')}
             size="sm"
             variant="outline"
             className="text-xs bg-black/50 border-white/20 text-white hover:bg-primary/20 hover:border-primary/50"
