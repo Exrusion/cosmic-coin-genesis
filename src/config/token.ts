@@ -3,7 +3,7 @@
 
 export const TOKEN_CONFIG = {
   // Current token (for testing/preview)
-  url: "https://dexscreener.com/solana/8neuca8lrrzg6k8jwwf3o4f2tsemyj3ennib1c3kvpme",
+  url: "https://dexscreener.com/solana/hba77qfpcrj5hgn4vesvwxtmgjmgxkxcthpuanyyqyfj",
   
   // Your launch token (update this when ready)
   // url: "https://dexscreener.com/solana/YOUR_TOKEN_ADDRESS_HERE",
