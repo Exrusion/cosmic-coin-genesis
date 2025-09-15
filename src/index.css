@@ -8,51 +8,72 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Cosmic Universe Theme */
+    --background: 220 20% 8%;
+    --foreground: 240 10% 85%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 220 25% 12%;
+    --card-foreground: 240 10% 85%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 220 25% 12%;
+    --popover-foreground: 240 10% 85%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 280 80% 60%;
+    --primary-foreground: 240 10% 95%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 240 15% 15%;
+    --secondary-foreground: 240 10% 85%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 240 15% 15%;
+    --muted-foreground: 240 5% 60%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 260 70% 50%;
+    --accent-foreground: 240 10% 95%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 80% 60%;
+    --destructive-foreground: 240 10% 95%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 240 15% 20%;
+    --input: 240 15% 20%;
+    --ring: 280 80% 60%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
-    --sidebar-background: 0 0% 98%;
+    /* Cosmic Color Palette */
+    --space-deep: 220 30% 6%;
+    --space-medium: 230 25% 12%;
+    --space-light: 240 20% 18%;
+    
+    /* Life Creation Colors */
+    --life-birth: 140 80% 60%;
+    --life-growth: 180 70% 50%;
+    --life-energy: 60 100% 70%;
+    
+    /* Life Destruction Colors */
+    --death-fire: 10 90% 60%;
+    --death-explosion: 25 100% 50%;
+    --death-void: 0 0% 10%;
+    
+    /* Cosmic Effects */
+    --nebula-purple: 280 80% 40%;
+    --nebula-blue: 220 70% 50%;
+    --nebula-pink: 320 60% 60%;
+    --star-glow: 50 100% 80%;
+    
+    /* Gradients */
+    --gradient-cosmic: linear-gradient(135deg, hsl(var(--space-deep)), hsl(var(--nebula-purple)), hsl(var(--space-medium)));
+    --gradient-life: linear-gradient(90deg, hsl(var(--life-birth)), hsl(var(--life-growth)), hsl(var(--life-energy)));
+    --gradient-death: linear-gradient(90deg, hsl(var(--death-fire)), hsl(var(--death-explosion)), hsl(var(--death-void)));
+    --gradient-nebula: radial-gradient(ellipse at center, hsl(var(--nebula-purple) / 0.3), hsl(var(--nebula-blue) / 0.2), transparent);
 
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 220 25% 10%;
+    --sidebar-foreground: 240 10% 80%;
+    --sidebar-primary: 280 80% 60%;
+    --sidebar-primary-foreground: 240 10% 95%;
+    --sidebar-accent: 240 15% 15%;
+    --sidebar-accent-foreground: 240 10% 85%;
+    --sidebar-border: 240 15% 20%;
+    --sidebar-ring: 280 80% 60%;
   }
 
   .dark {

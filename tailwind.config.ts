@@ -57,6 +57,36 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // Cosmic Color System
+        space: {
+          deep: "hsl(var(--space-deep))",
+          medium: "hsl(var(--space-medium))",
+          light: "hsl(var(--space-light))",
+        },
+        life: {
+          birth: "hsl(var(--life-birth))",
+          growth: "hsl(var(--life-growth))",
+          energy: "hsl(var(--life-energy))",
+        },
+        death: {
+          fire: "hsl(var(--death-fire))",
+          explosion: "hsl(var(--death-explosion))",
+          void: "hsl(var(--death-void))",
+        },
+        nebula: {
+          purple: "hsl(var(--nebula-purple))",
+          blue: "hsl(var(--nebula-blue))",
+          pink: "hsl(var(--nebula-pink))",
+        },
+        star: {
+          glow: "hsl(var(--star-glow))",
+        },
+      },
+      backgroundImage: {
+        'cosmic': 'var(--gradient-cosmic)',
+        'life': 'var(--gradient-life)',
+        'death': 'var(--gradient-death)',
+        'nebula': 'var(--gradient-nebula)',
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -80,10 +110,54 @@ export default {
             height: "0",
           },
         },
+        // Cosmic Animations
+        "float": {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-20px)" },
+        },
+        "twinkle": {
+          "0%, 50%, 100%": { opacity: "1" },
+          "25%, 75%": { opacity: "0.3" },
+        },
+        "pulse-glow": {
+          "0%, 100%": { boxShadow: "0 0 20px hsl(var(--star-glow) / 0.5)" },
+          "50%": { boxShadow: "0 0 40px hsl(var(--star-glow)), 0 0 60px hsl(var(--star-glow) / 0.3)" },
+        },
+        "birth": {
+          "0%": { transform: "scale(0)", opacity: "0" },
+          "50%": { transform: "scale(1.2)", opacity: "0.8" },
+          "100%": { transform: "scale(1)", opacity: "1" },
+        },
+        "destruction": {
+          "0%": { transform: "scale(1)", opacity: "1" },
+          "50%": { transform: "scale(1.5)", opacity: "0.5" },
+          "100%": { transform: "scale(0)", opacity: "0" },
+        },
+        "nebula-drift": {
+          "0%": { transform: "translateX(-100px) rotate(0deg)" },
+          "100%": { transform: "translateX(100px) rotate(360deg)" },
+        },
+        "cosmic-rotate": {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(360deg)" },
+        },
+        "energy-pulse": {
+          "0%, 100%": { transform: "scale(1)", filter: "brightness(1)" },
+          "50%": { transform: "scale(1.1)", filter: "brightness(1.5)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        // Cosmic Animations
+        "float": "float 6s ease-in-out infinite",
+        "twinkle": "twinkle 3s ease-in-out infinite",
+        "pulse-glow": "pulse-glow 2s ease-in-out infinite",
+        "birth": "birth 2s ease-out",
+        "destruction": "destruction 1.5s ease-in",
+        "nebula-drift": "nebula-drift 20s linear infinite",
+        "cosmic-rotate": "cosmic-rotate 30s linear infinite",
+        "energy-pulse": "energy-pulse 1.5s ease-in-out infinite",
       },
     },
   },
