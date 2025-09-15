@@ -13,11 +13,11 @@ interface Galaxy3DProps {
 export const Galaxy3D = ({ planets, galaxyIndex, lifeEvents, marketTrend }: Galaxy3DProps) => {
   const galaxyRef = useRef<THREE.Group>(null);
   
-  // Galaxy positioning - massive universe spacing
+  // Galaxy positioning - spread galaxies much further apart
   const galaxyPosition: [number, number, number] = [
-    (galaxyIndex % 3 - 1) * 200, // X: -200, 0, 200 (massive spacing)
-    Math.floor(galaxyIndex / 3) % 2 * 150 - 75, // Y: -75, 75
-    Math.floor(galaxyIndex / 6) * -150 - 100 // Z: deeper for more galaxies
+    (galaxyIndex % 3 - 1) * 80, // X: -80, 0, 80 (much wider spacing)
+    Math.floor(galaxyIndex / 3) % 2 * 60 - 30, // Y: -30, 30
+    Math.floor(galaxyIndex / 6) * -60 - 40 // Z: deeper for more galaxies
   ];
 
   // Slow galaxy rotation
@@ -31,7 +31,7 @@ export const Galaxy3D = ({ planets, galaxyIndex, lifeEvents, marketTrend }: Gala
   const arrangePlanetsInGalaxy = (planetList: typeof planets) => {
     return planetList.map((planet, index) => {
       const angle = (index / planetList.length) * Math.PI * 4; // Multiple spirals
-      const radius = 25 + Math.sqrt(index) * 5; // Even wider galaxy spread
+      const radius = 15 + Math.sqrt(index) * 3; // Wider spread, growing outward
       const spiralOffset = index * 0.8; // Spiral arm effect
       const height = Math.sin(index * 0.2) * 2; // Slight vertical variation
       
