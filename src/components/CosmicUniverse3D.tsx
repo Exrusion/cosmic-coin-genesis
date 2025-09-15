@@ -43,14 +43,14 @@ export const CosmicUniverse3D = () => {
   // Generate planet positions in a spiral pattern for large numbers
   const generatePlanetPositions = (count: number): [number, number, number][] => {
     const positions: [number, number, number][] = [];
-    const spiralArm = 2 * Math.PI / Math.max(count, 1);
+    const goldenAngle = Math.PI * (3 - Math.sqrt(5)); // Golden angle for better distribution
     
     for (let i = 0; i < count; i++) {
-      const angle = i * spiralArm;
-      const radius = 3 + (i * 0.8); // Start at radius 3, increase by 0.8 per planet
-      const x = Math.cos(angle) * radius;
-      const z = Math.sin(angle) * radius;
-      const y = (Math.random() - 0.5) * 4; // Random Y between -2 and 2
+      const theta = i * goldenAngle;
+      const radius = 3 + Math.sqrt(i) * 1.5; // More reasonable spacing
+      const x = Math.cos(theta) * radius;
+      const z = Math.sin(theta) * radius;
+      const y = (Math.random() - 0.5) * 2; // Smaller Y range for better visibility
       positions.push([x, y, z]);
     }
     

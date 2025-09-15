@@ -29,9 +29,9 @@ export const Planet3D = ({ position, index, lifeEvents, marketTrend, isNewPlanet
   const groupRef = useRef<THREE.Group>(null);
   
   const [stage, setStage] = useState<LifeStage>(
-    isNewPlanet ? 'forming' : (Math.random() > 0.7 ? 'forming' : 'empty')
+    isNewPlanet ? 'forming' : 'mature' // Start existing planets as mature with textures
   );
-  const [energy, setEnergy] = useState(isNewPlanet ? 75 : 50);
+  const [energy, setEnergy] = useState(isNewPlanet ? 75 : 100);
   const [planetType, setPlanetType] = useState<PlanetType>(() => {
     if (isNewPlanet) {
       const types: PlanetType[] = ['earth', 'mars', 'venus', 'gas', 'ice', 'volcanic'];
@@ -75,13 +75,13 @@ export const Planet3D = ({ position, index, lifeEvents, marketTrend, isNewPlanet
 
   const getSize = () => {
     switch (stage) {
-      case 'empty': return 0.2;
-      case 'forming': return 0.4;
-      case 'growing': return 0.6;
-      case 'mature': return 0.8;
-      case 'dying': return 0.6;
-      case 'dead': return 0.3;
-      default: return 0.2;
+      case 'empty': return 0.5;
+      case 'forming': return 0.8;
+      case 'growing': return 1.2;
+      case 'mature': return 1.5;
+      case 'dying': return 1.2;
+      case 'dead': return 0.8;
+      default: return 0.5;
     }
   };
 
