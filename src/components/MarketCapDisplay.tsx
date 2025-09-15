@@ -49,7 +49,7 @@ export const MarketCapDisplay = ({ data }: MarketCapDisplayProps) => {
             data.trend === 'stable' && "bg-nebula-blue"
           )} />
           <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
-            LIFEOFCOIN LIFE FORCE
+            LIFEOFCOIN
           </h2>
           <p className="text-xs text-muted-foreground">LIFEOFCOIN</p>
         </div>
