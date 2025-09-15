@@ -1,7 +1,15 @@
 import { useRef, useEffect, useState } from 'react';
-import { useFrame } from '@react-three/fiber';
+import { useFrame, useLoader } from '@react-three/fiber';
 import { Sphere, Ring } from '@react-three/drei';
 import * as THREE from 'three';
+
+// Import texture assets
+import moonTexture from '@/assets/textures/moon-texture.png';
+import gasGiantTexture from '@/assets/textures/gas-giant-texture.jpg';
+import venusTexture from '@/assets/textures/venus-texture.jpeg';
+import marsTexture from '@/assets/textures/mars-texture.jpg';
+import rockyTexture from '@/assets/textures/rocky-texture.jpg';
+import marsSurfaceTexture from '@/assets/textures/mars-surface-texture.jpg';
 
 interface Planet3DProps {
   position: [number, number, number];
@@ -23,18 +31,20 @@ export const Planet3D = ({ position, index, lifeEvents, marketTrend }: Planet3DP
   const [planetType, setPlanetType] = useState<PlanetType>('earth');
   const [rotationSpeed, setRotationSpeed] = useState(Math.random() * 0.02 + 0.01);
 
-  // Planet colors based on type
-  const getColorByType = (type: PlanetType) => {
+  // Load textures for different planet types
+  const getTextureByType = (type: PlanetType) => {
     switch (type) {
-      case 'earth': return '#4A90E2';
-      case 'mars': return '#CD5C5C';
-      case 'venus': return '#FFA500';
-      case 'gas': return '#FFD700';
-      case 'ice': return '#87CEEB';
-      case 'volcanic': return '#FF4500';
-      default: return '#888888';
+      case 'earth': return useLoader(THREE.TextureLoader, rockyTexture);
+      case 'mars': return useLoader(THREE.TextureLoader, marsTexture);
+      case 'venus': return useLoader(THREE.TextureLoader, venusTexture);
+      case 'gas': return useLoader(THREE.TextureLoader, gasGiantTexture);
+      case 'ice': return useLoader(THREE.TextureLoader, moonTexture);
+      case 'volcanic': return useLoader(THREE.TextureLoader, marsSurfaceTexture);
+      default: return useLoader(THREE.TextureLoader, moonTexture);
     }
   };
+
+  const texture = getTextureByType(planetType);
 
   const getSize = () => {
     switch (stage) {
@@ -106,7 +116,6 @@ export const Planet3D = ({ position, index, lifeEvents, marketTrend }: Planet3DP
   });
 
   const size = getSize();
-  const color = getColorByType(planetType);
 
   if (stage === 'empty') {
     return (
@@ -132,7 +141,7 @@ export const Planet3D = ({ position, index, lifeEvents, marketTrend }: Planet3DP
       {/* Main planet */}
       <Sphere ref={meshRef} args={[size, 32, 32]}>
         <meshStandardMaterial 
-          color={color}
+          map={texture}
           roughness={0.8}
           metalness={0.2}
         />
@@ -142,9 +151,9 @@ export const Planet3D = ({ position, index, lifeEvents, marketTrend }: Planet3DP
       {stage === 'mature' && (
         <Sphere ref={atmosphereRef} args={[size + 0.1, 32, 32]}>
           <meshStandardMaterial 
-            color={color}
+            map={texture}
             transparent 
-            opacity={0.2}
+            opacity={0.15}
             side={THREE.BackSide}
           />
         </Sphere>

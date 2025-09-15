@@ -27,6 +27,8 @@ export const CosmicUniverse3D = () => {
   
   const [lifeEvents, setLifeEvents] = useState<{ type: 'birth' | 'death', id: string, timestamp: number }[]>([]);
   const [previousMarketCap, setPreviousMarketCap] = useState<number>(0);
+  const [planets, setPlanets] = useState<{ position: [number, number, number], id: string }[]>([]);
+  const [lastMajorIncrease, setLastMajorIncrease] = useState<number>(0);
   
   // DexScreener URL tracking
   const TRACKED_URL = "https://dexscreener.com/solana/fs9et2zacvw3nn3a8a1wn5acifgkbudcuvwgynjs2fag";
@@ -51,7 +53,33 @@ export const CosmicUniverse3D = () => {
           const currentMarketCap = DexScreenerService.formatMarketCap(tokenData.marketCap);
           const change = previousMarketCap > 0 ? currentMarketCap - previousMarketCap : 0;
           
-          // Check for significant changes (1k threshold for more sensitivity)
+          // Check for +5k increase to create new planets
+          const marketCapIncrease = currentMarketCap - lastMajorIncrease;
+          if (marketCapIncrease >= 5000 && previousMarketCap > 0) {
+            // Create new planet pointing towards market trend direction
+            const trendDirection = marketData.trend === 'up' ? 1 : marketData.trend === 'down' ? -1 : 0;
+            const newPlanetPosition: [number, number, number] = [
+              (Math.random() - 0.5) * 20 + (trendDirection * 5),
+              (Math.random() - 0.5) * 10,
+              (Math.random() - 0.5) * 20 + (trendDirection * 3)
+            ];
+            
+            const newPlanet = {
+              position: newPlanetPosition,
+              id: `planet-${Date.now()}`
+            };
+            
+            setPlanets(prev => [...prev, newPlanet]);
+            setLastMajorIncrease(currentMarketCap);
+            
+            toast({
+              title: "🪐 New Planet Born!",
+              description: `+$${marketCapIncrease.toLocaleString()} market cap increase created a new world!`,
+              duration: 5000,
+            });
+          }
+          
+          // Regular life events for existing planets
           if (Math.abs(change) >= 1000 && previousMarketCap > 0) {
             console.log('Life event triggered! Change:', change, 'Previous:', previousMarketCap, 'Current:', currentMarketCap);
             const event = {
@@ -100,12 +128,23 @@ export const CosmicUniverse3D = () => {
     return () => clearInterval(interval);
   }, [TOKEN_ADDRESS, previousMarketCap, toast]);
 
-  // Generate planet positions in 3D space
-  const planetPositions: [number, number, number][] = [
+  // Initial planet positions in 3D space
+  const initialPlanetPositions: [number, number, number][] = [
     [-8, 2, -5], [0, 3, -8], [8, 1, -5],
     [-6, -1, 0], [0, 0, 0], [6, 2, 0],
     [-4, 1, 5], [2, -2, 8], [7, 0, 6]
   ];
+
+  // Initialize planets on first load
+  useEffect(() => {
+    if (planets.length === 0) {
+      const initialPlanets = initialPlanetPositions.map((position, index) => ({
+        position,
+        id: `initial-planet-${index}`
+      }));
+      setPlanets(initialPlanets);
+    }
+  }, [planets.length]);
 
   return (
     <div className="relative w-full h-screen overflow-hidden bg-black">
@@ -157,10 +196,10 @@ export const CosmicUniverse3D = () => {
           <StarField3D />
 
           {/* Planets */}
-          {planetPositions.map((position, index) => (
+          {planets.map((planet, index) => (
             <Planet3D
-              key={index}
-              position={position}
+              key={planet.id}
+              position={planet.position}
               index={index}
               lifeEvents={lifeEvents}
               marketTrend={marketData.trend}
