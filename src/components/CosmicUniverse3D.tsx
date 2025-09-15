@@ -65,7 +65,7 @@ export const CosmicUniverse3D = () => {
   };
   
   // DexScreener URL tracking
-  const TRACKED_URL = "https://dexscreener.com/solana/fxksrhfikhka1pkpdehbdx3yxtdnjheqwnumdlrvzkwx";
+  const TRACKED_URL = "https://dexscreener.com/solana/4wtctmp8bj9ngtz7oggs7wvq3ev6qujufd8tvajb5zlb";
   const TOKEN_ADDRESS = DexScreenerService.parseTokenAddress(TRACKED_URL);
 
   // Fetch real token data
