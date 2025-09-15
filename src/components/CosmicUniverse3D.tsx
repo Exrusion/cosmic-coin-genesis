@@ -124,13 +124,12 @@ export const CosmicUniverse3D = () => {
                 duration: 5000,
               });
             } else {
-              // REMOVE planets
-              const planetsToRemove = currentPlanetCount - targetPlanetCount;
-              setPlanets(prev => prev.slice(0, targetPlanetCount));
+              // REMOVE planets - only destroy 1 planet at a time
+              setPlanets(prev => prev.slice(0, -1));
               
               toast({
-                title: "💥 Planets Destroyed!",
-                description: `Market cap $${currentMarketCap.toLocaleString()} = ${targetPlanetCount} planets (-${planetsToRemove})`,
+                title: "💥 Planet Destroyed!",
+                description: `Market cap fell by $5k - 1 planet destroyed`,
                 duration: 5000,
               });
             }
