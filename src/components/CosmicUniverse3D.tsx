@@ -261,14 +261,32 @@ export const CosmicUniverse3D = () => {
       <div className="absolute top-8 right-8 z-20 text-white/60 text-sm space-y-2">
         <div>Mouse: Orbit • Scroll: Zoom • Drag: Pan</div>
         <div>Explore the 3D universe!</div>
-        <Button 
-          onClick={locatePlanets}
-          size="sm"
-          variant="outline"
-          className="text-xs bg-black/50 border-white/20 text-white hover:bg-white/10"
-        >
-          🪐 Find Planets
-        </Button>
+        <div className="flex gap-2">
+          <Button 
+            onClick={locatePlanets}
+            size="sm"
+            variant="outline"
+            className="text-xs bg-black/50 border-white/20 text-white hover:bg-white/10"
+          >
+            🪐 Find Planets
+          </Button>
+          <Button 
+            onClick={() => window.open('https://x.com', '_blank')}
+            size="sm"
+            variant="outline"
+            className="text-xs bg-black/50 border-white/20 text-white hover:bg-primary/20 hover:border-primary/50"
+          >
+            𝕏
+          </Button>
+          <Button 
+            onClick={() => window.open('https://pump.fun', '_blank')}
+            size="sm"
+            variant="outline"
+            className="text-xs bg-black/50 border-white/20 text-white hover:bg-nebula-purple/20 hover:border-nebula-purple/50"
+          >
+            🚀 pump.fun
+          </Button>
+        </div>
       </div>
 
       {/* 3D Scene */}
