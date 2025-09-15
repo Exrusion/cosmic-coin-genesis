@@ -290,8 +290,6 @@ export const CosmicUniverse3D = () => {
             enablePan={true}
             enableZoom={true}
             enableRotate={true}
-            minDistance={8}
-            maxDistance={150}
             autoRotate={false}
             autoRotateSpeed={0.5}
           />
