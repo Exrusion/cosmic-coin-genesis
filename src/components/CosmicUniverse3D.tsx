@@ -50,12 +50,12 @@ export const CosmicUniverse3D = () => {
     
     for (let i = 0; i < count; i++) {
       const theta = i * goldenAngle;
-      // Much larger spacing - each planet gets its own space bubble
-      const radius = 8 + i * 6; // Start at radius 8, increase by 6 for each planet
+      // Increase spacing significantly between planets
+      const radius = 4 + i * 2.5; // Start at radius 4, increase by 2.5 for each planet
       const x = Math.cos(theta) * radius;
       const z = Math.sin(theta) * radius;
-      // Wider vertical spread for more 3D distribution
-      const y = (Math.random() - 0.5) * 12; 
+      // Moderate vertical spread for 3D distribution
+      const y = (Math.random() - 0.5) * 6; 
       
       // Ensure all values are valid numbers
       if (!isNaN(x) && !isNaN(y) && !isNaN(z) && isFinite(x) && isFinite(y) && isFinite(z)) {
@@ -280,8 +280,8 @@ export const CosmicUniverse3D = () => {
           {/* Camera and Controls */}
           <PerspectiveCamera 
             makeDefault 
-            position={[0, 15, 35]} 
-            fov={50}
+            position={[0, 8, 20]} 
+            fov={60}
             near={0.1}
             far={1000}
           />
@@ -290,8 +290,8 @@ export const CosmicUniverse3D = () => {
             enablePan={true}
             enableZoom={true}
             enableRotate={true}
-            minDistance={15}
-            maxDistance={300}
+            minDistance={8}
+            maxDistance={150}
             autoRotate={false}
             autoRotateSpeed={0.5}
           />
