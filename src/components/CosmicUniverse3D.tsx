@@ -260,12 +260,13 @@ export const CosmicUniverse3D = () => {
           />
 
           {/* Lighting */}
-          <ambientLight intensity={0.2} />
-          <pointLight position={[10, 10, 10]} intensity={1} />
-          <pointLight position={[-10, -10, -10]} intensity={0.5} />
+          <ambientLight intensity={0.4} />
+          <pointLight position={[10, 10, 10]} intensity={1.5} />
+          <pointLight position={[-10, -10, -10]} intensity={0.8} />
+          <pointLight position={[0, 15, 0]} intensity={1} />
           <directionalLight 
             position={[5, 5, 5]} 
-            intensity={0.8}
+            intensity={1.2}
             castShadow
             shadow-mapSize-width={2048}
             shadow-mapSize-height={2048}

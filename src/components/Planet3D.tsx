@@ -28,16 +28,11 @@ export const Planet3D = ({ position, index, lifeEvents, marketTrend, isNewPlanet
   const ringRef = useRef<THREE.Mesh>(null);
   const groupRef = useRef<THREE.Group>(null);
   
-  const [stage, setStage] = useState<LifeStage>(
-    isNewPlanet ? 'forming' : 'mature' // Start existing planets as mature with textures
-  );
-  const [energy, setEnergy] = useState(isNewPlanet ? 75 : 100);
+  const [stage, setStage] = useState<LifeStage>('mature'); // Always start mature for visibility
+  const [energy, setEnergy] = useState(100);
   const [planetType, setPlanetType] = useState<PlanetType>(() => {
-    if (isNewPlanet) {
-      const types: PlanetType[] = ['earth', 'mars', 'venus', 'gas', 'ice', 'volcanic'];
-      return types[Math.floor(Math.random() * types.length)];
-    }
-    return 'earth';
+    const types: PlanetType[] = ['earth', 'mars', 'venus', 'gas', 'ice', 'volcanic'];
+    return types[Math.floor(Math.random() * types.length)];
   });
   const [rotationSpeed, setRotationSpeed] = useState(Math.random() * 0.02 + 0.01);
   
@@ -75,13 +70,13 @@ export const Planet3D = ({ position, index, lifeEvents, marketTrend, isNewPlanet
 
   const getSize = () => {
     switch (stage) {
-      case 'empty': return 0.5;
-      case 'forming': return 0.8;
-      case 'growing': return 1.2;
-      case 'mature': return 1.5;
-      case 'dying': return 1.2;
-      case 'dead': return 0.8;
-      default: return 0.5;
+      case 'empty': return 0.8;
+      case 'forming': return 1.2;
+      case 'growing': return 1.8;
+      case 'mature': return 2.2; // Much larger for visibility
+      case 'dying': return 1.8;
+      case 'dead': return 1.2;
+      default: return 0.8;
     }
   };
 
@@ -204,8 +199,10 @@ export const Planet3D = ({ position, index, lifeEvents, marketTrend, isNewPlanet
       <Sphere ref={meshRef} args={[size, 32, 32]}>
         <meshStandardMaterial 
           map={texture}
-          roughness={0.8}
-          metalness={0.2}
+          roughness={0.6}
+          metalness={0.1}
+          emissive="#111111" // Slight glow for visibility
+          emissiveIntensity={0.1}
         />
       </Sphere>
 
