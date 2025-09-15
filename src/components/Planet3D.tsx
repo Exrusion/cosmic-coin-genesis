@@ -27,10 +27,30 @@ export const Planet3D = ({ position, index, lifeEvents, marketTrend, isNewPlanet
   const atmosphereRef = useRef<THREE.Mesh>(null);
   const ringRef = useRef<THREE.Mesh>(null);
   
-  const [stage, setStage] = useState<LifeStage>(Math.random() > 0.7 ? 'forming' : 'empty');
-  const [energy, setEnergy] = useState(50);
-  const [planetType, setPlanetType] = useState<PlanetType>('earth');
+  const [stage, setStage] = useState<LifeStage>(
+    isNewPlanet ? 'forming' : (Math.random() > 0.7 ? 'forming' : 'empty')
+  );
+  const [energy, setEnergy] = useState(isNewPlanet ? 75 : 50);
+  const [planetType, setPlanetType] = useState<PlanetType>(() => {
+    if (isNewPlanet) {
+      const types: PlanetType[] = ['earth', 'mars', 'venus', 'gas', 'ice', 'volcanic'];
+      return types[Math.floor(Math.random() * types.length)];
+    }
+    return 'earth';
+  });
   const [rotationSpeed, setRotationSpeed] = useState(Math.random() * 0.02 + 0.01);
+
+  // Auto-evolve new planets to show textures immediately
+  useEffect(() => {
+    if (isNewPlanet && stage === 'forming') {
+      const timer1 = setTimeout(() => setStage('growing'), 1000);
+      const timer2 = setTimeout(() => setStage('mature'), 2500);
+      return () => {
+        clearTimeout(timer1);
+        clearTimeout(timer2);
+      };
+    }
+  }, [isNewPlanet, stage]);
 
   // Load textures for different planet types
   const getTextureByType = (type: PlanetType) => {
