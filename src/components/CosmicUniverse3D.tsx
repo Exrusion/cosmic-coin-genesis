@@ -47,11 +47,15 @@ export const CosmicUniverse3D = () => {
     
     for (let i = 0; i < count; i++) {
       const theta = i * goldenAngle;
-      const radius = 3 + Math.sqrt(i) * 1.5; // More reasonable spacing
+      const radius = Math.min(3 + Math.sqrt(i) * 1.2, 20); // Limit max radius to prevent disappearing
       const x = Math.cos(theta) * radius;
       const z = Math.sin(theta) * radius;
-      const y = (Math.random() - 0.5) * 2; // Smaller Y range for better visibility
-      positions.push([x, y, z]);
+      const y = (Math.random() - 0.5) * 1.5; // Keep planets more centered vertically
+      
+      // Ensure all values are valid numbers
+      if (!isNaN(x) && !isNaN(y) && !isNaN(z) && isFinite(x) && isFinite(y) && isFinite(z)) {
+        positions.push([x, y, z]);
+      }
     }
     
     return positions;

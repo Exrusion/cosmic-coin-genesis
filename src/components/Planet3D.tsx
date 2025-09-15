@@ -124,17 +124,28 @@ export const Planet3D = ({ position, index, lifeEvents, marketTrend, isNewPlanet
 
   // Animation loop
   useFrame((state, delta) => {
-    // Orbital motion around center
-    if (groupRef.current && orbitalRadius > 0.5) {
+    if (!groupRef.current) return;
+    
+    // Orbital motion around center with bounds checking
+    if (orbitalRadius > 0.5) {
       const angle = initialAngle + state.clock.elapsedTime * orbitalSpeed;
-      groupRef.current.position.x = Math.cos(angle) * orbitalRadius;
-      groupRef.current.position.z = Math.sin(angle) * orbitalRadius;
+      const newX = Math.cos(angle) * Math.min(orbitalRadius, 25); // Limit max distance
+      const newZ = Math.sin(angle) * Math.min(orbitalRadius, 25);
       
-      // Keep original Y position with floating animation
-      groupRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime + index) * 0.1;
-    } else if (groupRef.current) {
+      // Ensure positions are valid numbers
+      if (!isNaN(newX) && !isNaN(newZ) && isFinite(newX) && isFinite(newZ)) {
+        groupRef.current.position.x = newX;
+        groupRef.current.position.z = newZ;
+        // Keep original Y position with floating animation
+        groupRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime + index) * 0.1;
+      }
+    } else {
       // For center planet or very close planets, just do floating animation
-      groupRef.current.position.set(position[0], position[1] + Math.sin(state.clock.elapsedTime + index) * 0.1, position[2]);
+      groupRef.current.position.set(
+        position[0], 
+        position[1] + Math.sin(state.clock.elapsedTime + index) * 0.1, 
+        position[2]
+      );
     }
     
     // Planet rotation on its axis
