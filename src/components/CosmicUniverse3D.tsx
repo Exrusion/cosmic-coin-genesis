@@ -5,6 +5,7 @@ import { Planet3D } from "./Planet3D";
 import { StarField3D } from "./StarField3D";
 import { MarketCapDisplay } from "./MarketCapDisplay";
 import { CosmicAudio } from "./CosmicAudio";
+import { LoadingScreen } from "./LoadingScreen";
 import { DexScreenerService } from "@/services/DexScreenerService";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
@@ -29,6 +30,7 @@ const initialPlanetPositions: [number, number, number][] = [
 export const CosmicUniverse3D = () => {
   const controlsRef = useRef<any>(null);
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(true);
   const [marketData, setMarketData] = useState<MarketData>({
     marketCap: 0,
     change: 0,
@@ -39,6 +41,15 @@ export const CosmicUniverse3D = () => {
   const [previousMarketCap, setPreviousMarketCap] = useState<number>(0);
   const [planets, setPlanets] = useState<{ position: [number, number, number], id: string, isNew?: boolean, createdAt?: number }[]>([]);
   const [lastMajorIncrease, setLastMajorIncrease] = useState<number>(0);
+
+  // Simulate initial loading
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 3000); // 3 second loading screen
+
+    return () => clearTimeout(timer);
+  }, []);
 
   // Generate planet positions in a spiral pattern for large numbers
   const generatePlanetPositions = (count: number): [number, number, number][] => {
@@ -216,6 +227,11 @@ export const CosmicUniverse3D = () => {
     }
   };
 
+  // Show loading screen
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
+
   return (
     <div className="relative w-full h-screen overflow-hidden bg-black">
       {/* Market Cap Display - 2D Overlay */}
@@ -239,7 +255,11 @@ export const CosmicUniverse3D = () => {
 
       {/* 3D Scene */}
       <Canvas className="w-full h-full">
-        <Suspense fallback={null}>
+        <Suspense fallback={
+          <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+            <div className="text-white">Loading 3D assets...</div>
+          </div>
+        }>
           {/* Camera and Controls */}
           <PerspectiveCamera 
             makeDefault 
