@@ -33,7 +33,7 @@ export const CosmicUniverse3D = () => {
   const [lastMajorIncrease, setLastMajorIncrease] = useState<number>(0);
   
   // DexScreener URL tracking
-  const TRACKED_URL = "https://dexscreener.com/solana/c9nfc4v7cefogvutczqk2mmpwhuqqgtdmdrweydc3bd1";
+  const TRACKED_URL = "https://dexscreener.com/solana/fxksrhfikhka1pkpdehbdx3yxtdnjheqwnumdlrvzkwx";
   const TOKEN_ADDRESS = DexScreenerService.parseTokenAddress(TRACKED_URL);
 
   // Fetch real token data
