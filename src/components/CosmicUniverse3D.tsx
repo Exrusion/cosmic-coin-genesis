@@ -2,6 +2,7 @@ import { useEffect, useState, Suspense, useRef } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import { Planet3D } from "./Planet3D";
+import { Galaxy3D } from "./Galaxy3D";
 import { StarField3D } from "./StarField3D";
 import { MarketCapDisplay } from "./MarketCapDisplay";
 import { CosmicAudio } from "./CosmicAudio";
@@ -40,6 +41,7 @@ export const CosmicUniverse3D = () => {
   const [planets, setPlanets] = useState<{ position: [number, number, number], id: string, isNew?: boolean, createdAt?: number }[]>([]);
   const [lastMajorIncrease, setLastMajorIncrease] = useState<number>(0);
   const [totalPlanetsBorn, setTotalPlanetsBorn] = useState<number>(0);
+  const [galaxies, setGalaxies] = useState<{ planets: typeof planets, id: string }[]>([]);
 
   // Generate planet positions in a spiral pattern for large numbers
   const generatePlanetPositions = (count: number): [number, number, number][] => {
@@ -210,6 +212,23 @@ export const CosmicUniverse3D = () => {
     return () => clearInterval(interval);
   }, [planets.length]);
 
+  // Group planets into galaxies (20 planets per galaxy)
+  useEffect(() => {
+    const PLANETS_PER_GALAXY = 20;
+    const totalGalaxies = Math.floor(planets.length / PLANETS_PER_GALAXY);
+    const newGalaxies = [];
+    
+    for (let i = 0; i < totalGalaxies; i++) {
+      const galaxyPlanets = planets.slice(i * PLANETS_PER_GALAXY, (i + 1) * PLANETS_PER_GALAXY);
+      newGalaxies.push({
+        planets: galaxyPlanets,
+        id: `galaxy-${i}`
+      });
+    }
+    
+    setGalaxies(newGalaxies);
+  }, [planets]);
+
   // Function to locate planets
   const locatePlanets = () => {
     if (controlsRef.current) {
@@ -231,7 +250,7 @@ export const CosmicUniverse3D = () => {
             🪐 {totalPlanetsBorn.toLocaleString()}
           </div>
           <div className="text-white/50 text-xs mt-1">
-            Active: {planets.length.toLocaleString()}
+            Active: {planets.length.toLocaleString()} | Galaxies: {galaxies.length}
           </div>
         </div>
       </div>
@@ -288,12 +307,23 @@ export const CosmicUniverse3D = () => {
           {/* Star Field Background */}
           <StarField3D />
 
-          {/* Planets */}
-          {planets.map((planet, index) => (
+          {/* Galaxies with 20 planets each */}
+          {galaxies.map((galaxy, index) => (
+            <Galaxy3D
+              key={galaxy.id}
+              planets={galaxy.planets}
+              galaxyIndex={index}
+              lifeEvents={lifeEvents}
+              marketTrend={marketData.trend}
+            />
+          ))}
+
+          {/* Individual planets (not yet in galaxies) */}
+          {planets.slice(galaxies.length * 20).map((planet, index) => (
             <Planet3D
               key={planet.id}
               position={planet.position}
-              index={index}
+              index={galaxies.length * 20 + index}
               lifeEvents={lifeEvents}
               marketTrend={marketData.trend}
               isNewPlanet={planet.isNew}
