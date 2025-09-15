@@ -16,12 +16,13 @@ interface Planet3DProps {
   index: number;
   lifeEvents: { type: 'birth' | 'death', id: string, timestamp: number }[];
   marketTrend: 'up' | 'down' | 'stable';
+  isNewPlanet?: boolean;
 }
 
 type LifeStage = 'empty' | 'forming' | 'growing' | 'mature' | 'dying' | 'dead';
 type PlanetType = 'earth' | 'mars' | 'venus' | 'gas' | 'ice' | 'volcanic';
 
-export const Planet3D = ({ position, index, lifeEvents, marketTrend }: Planet3DProps) => {
+export const Planet3D = ({ position, index, lifeEvents, marketTrend, isNewPlanet = false }: Planet3DProps) => {
   const meshRef = useRef<THREE.Mesh>(null);
   const atmosphereRef = useRef<THREE.Mesh>(null);
   const ringRef = useRef<THREE.Mesh>(null);
@@ -191,6 +192,40 @@ export const Planet3D = ({ position, index, lifeEvents, marketTrend }: Planet3DP
             opacity={0.5}
           />
         </Sphere>
+      )}
+
+      {/* New Planet Marker */}
+      {isNewPlanet && (
+        <>
+          {/* Glowing ring marker */}
+          <Ring args={[size + 0.3, size + 0.5, 32]} rotation={[Math.PI / 2, 0, 0]}>
+            <meshBasicMaterial 
+              color="#00ff00"
+              transparent 
+              opacity={0.6}
+              side={THREE.DoubleSide}
+            />
+          </Ring>
+          
+          {/* Pulsing outer glow */}
+          <Sphere args={[size + 0.15, 16, 16]}>
+            <meshBasicMaterial 
+              color="#00ff00"
+              transparent 
+              opacity={0.2}
+            />
+          </Sphere>
+          
+          {/* New planet label */}
+          <mesh position={[0, size + 1, 0]}>
+            <planeGeometry args={[1.5, 0.3]} />
+            <meshBasicMaterial 
+              color="#000000" 
+              transparent 
+              opacity={0.8}
+            />
+          </mesh>
+        </>
       )}
     </group>
   );

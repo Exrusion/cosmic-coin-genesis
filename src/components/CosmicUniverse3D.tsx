@@ -29,7 +29,7 @@ export const CosmicUniverse3D = () => {
   
   const [lifeEvents, setLifeEvents] = useState<{ type: 'birth' | 'death', id: string, timestamp: number }[]>([]);
   const [previousMarketCap, setPreviousMarketCap] = useState<number>(0);
-  const [planets, setPlanets] = useState<{ position: [number, number, number], id: string }[]>([]);
+  const [planets, setPlanets] = useState<{ position: [number, number, number], id: string, isNew?: boolean, createdAt?: number }[]>([]);
   const [lastMajorIncrease, setLastMajorIncrease] = useState<number>(0);
   
   // DexScreener URL tracking
@@ -68,7 +68,9 @@ export const CosmicUniverse3D = () => {
             
             const newPlanet = {
               position: newPlanetPosition,
-              id: `planet-${Date.now()}`
+              id: `planet-${Date.now()}`,
+              isNew: true,
+              createdAt: Date.now()
             };
             
             setPlanets(prev => [...prev, newPlanet]);
@@ -142,10 +144,25 @@ export const CosmicUniverse3D = () => {
     if (planets.length === 0) {
       const initialPlanets = initialPlanetPositions.map((position, index) => ({
         position,
-        id: `initial-planet-${index}`
+        id: `initial-planet-${index}`,
+        isNew: false
       }));
       setPlanets(initialPlanets);
     }
+  }, [planets.length]);
+
+  // Remove "new" status after 30 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPlanets(prev => prev.map(planet => {
+        if (planet.isNew && planet.createdAt && Date.now() - planet.createdAt > 30000) {
+          return { ...planet, isNew: false };
+        }
+        return planet;
+      }));
+    }, 5000);
+
+    return () => clearInterval(interval);
   }, [planets.length]);
 
   // Function to locate planets
@@ -222,6 +239,7 @@ export const CosmicUniverse3D = () => {
               index={index}
               lifeEvents={lifeEvents}
               marketTrend={marketData.trend}
+              isNewPlanet={planet.isNew}
             />
           ))}
 
