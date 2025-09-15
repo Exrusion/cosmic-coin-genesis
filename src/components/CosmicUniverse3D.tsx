@@ -50,12 +50,12 @@ export const CosmicUniverse3D = () => {
     
     for (let i = 0; i < count; i++) {
       const theta = i * goldenAngle;
-      // Increase spacing significantly between planets
-      const radius = 4 + i * 2.5; // Start at radius 4, increase by 2.5 for each planet
+      // Significantly increase spacing between planets
+      const radius = 8 + i * 5; // Start at radius 8, increase by 5 for each planet
       const x = Math.cos(theta) * radius;
       const z = Math.sin(theta) * radius;
-      // Moderate vertical spread for 3D distribution
-      const y = (Math.random() - 0.5) * 6; 
+      // Increase vertical spread for better 3D distribution
+      const y = (Math.random() - 0.5) * 8;
       
       // Ensure all values are valid numbers
       if (!isNaN(x) && !isNaN(y) && !isNaN(z) && isFinite(x) && isFinite(y) && isFinite(z)) {
