@@ -13,11 +13,11 @@ interface Galaxy3DProps {
 export const Galaxy3D = ({ planets, galaxyIndex, lifeEvents, marketTrend }: Galaxy3DProps) => {
   const galaxyRef = useRef<THREE.Group>(null);
   
-  // Galaxy positioning - spread galaxies much further apart
+  // Galaxy positioning - spread galaxies in 3D grid pattern for accessibility
   const galaxyPosition: [number, number, number] = [
-    (galaxyIndex % 3 - 1) * 80, // X: -80, 0, 80 (much wider spacing)
-    Math.floor(galaxyIndex / 3) % 2 * 60 - 30, // Y: -30, 30
-    Math.floor(galaxyIndex / 6) * -60 - 40 // Z: deeper for more galaxies
+    (galaxyIndex % 3 - 1) * 80, // X: -80, 0, 80 (3 columns)
+    (Math.floor(galaxyIndex / 3) % 3 - 1) * 60, // Y: -60, 0, 60 (3 rows) 
+    Math.floor(galaxyIndex / 9) * -80 - 40 // Z: layers every 9 galaxies
   ];
 
   // Slow galaxy rotation

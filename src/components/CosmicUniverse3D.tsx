@@ -229,7 +229,42 @@ export const CosmicUniverse3D = () => {
     setGalaxies(newGalaxies);
   }, [planets]);
 
-  // Function to locate planets
+  // Function to navigate to specific galaxy
+  const navigateToGalaxy = (galaxyIndex: number) => {
+    if (controlsRef.current && galaxyIndex < galaxies.length) {
+      // Calculate galaxy position using same logic as Galaxy3D
+      const galaxyPosition = [
+        (galaxyIndex % 3 - 1) * 80, // X: -80, 0, 80 (3 columns)
+        (Math.floor(galaxyIndex / 3) % 3 - 1) * 60, // Y: -60, 0, 60 (3 rows) 
+        Math.floor(galaxyIndex / 9) * -80 - 40 // Z: layers every 9 galaxies
+      ];
+      
+      // Move camera to focus on the galaxy
+      controlsRef.current.object.position.set(
+        galaxyPosition[0] + 30,
+        galaxyPosition[1] + 20,
+        galaxyPosition[2] + 80
+      );
+      controlsRef.current.target.set(
+        galaxyPosition[0],
+        galaxyPosition[1],
+        galaxyPosition[2]
+      );
+      controlsRef.current.update();
+    }
+  };
+
+  // Function to get universe overview
+  const getUniverseOverview = () => {
+    if (controlsRef.current) {
+      // Position camera for overview of all galaxies
+      controlsRef.current.object.position.set(0, 50, 200);
+      controlsRef.current.target.set(0, 0, -100);
+      controlsRef.current.update();
+    }
+  };
+
+  // Function to locate planets/reset view
   const locatePlanets = () => {
     if (controlsRef.current) {
       // Reset camera to default position where planets are visible
@@ -259,14 +294,51 @@ export const CosmicUniverse3D = () => {
       <div className="absolute top-8 right-8 z-20 text-white/60 text-sm space-y-2">
         <div>Mouse: Orbit • Scroll: Zoom • Drag: Pan</div>
         <div>Explore the 3D universe!</div>
-        <Button 
-          onClick={locatePlanets}
-          size="sm"
-          variant="outline"
-          className="text-xs bg-black/50 border-white/20 text-white hover:bg-white/10"
-        >
-          🪐 Find Planets
-        </Button>
+        
+        {/* Navigation Controls */}
+        <div className="flex flex-col gap-1">
+          <Button 
+            onClick={getUniverseOverview}
+            size="sm"
+            variant="outline"
+            className="text-xs bg-black/50 border-white/20 text-white hover:bg-white/10"
+          >
+            🌌 Universe Overview
+          </Button>
+          <Button 
+            onClick={locatePlanets}
+            size="sm"
+            variant="outline"
+            className="text-xs bg-black/50 border-white/20 text-white hover:bg-white/10"
+          >
+            🪐 Reset View
+          </Button>
+        </div>
+
+        {/* Galaxy Navigation */}
+        {galaxies.length > 0 && (
+          <div className="mt-2">
+            <div className="text-xs text-white/40 mb-1">Navigate to Galaxy:</div>
+            <div className="flex flex-wrap gap-1 max-w-32">
+              {galaxies.slice(0, 12).map((galaxy, index) => (
+                <Button
+                  key={galaxy.id}
+                  onClick={() => navigateToGalaxy(index)}
+                  size="sm"
+                  variant="outline"
+                  className="text-xs w-8 h-6 p-0 bg-black/50 border-white/20 text-white hover:bg-white/10"
+                >
+                  {index + 1}
+                </Button>
+              ))}
+              {galaxies.length > 12 && (
+                <div className="text-xs text-white/40 w-full">
+                  +{galaxies.length - 12} more...
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* 3D Scene */}
@@ -286,9 +358,12 @@ export const CosmicUniverse3D = () => {
             enableZoom={true}
             enableRotate={true}
             minDistance={5}
-            maxDistance={50}
+            maxDistance={500}
             autoRotate={false}
             autoRotateSpeed={0.5}
+            panSpeed={2}
+            rotateSpeed={1}
+            zoomSpeed={1.5}
           />
 
           {/* Lighting */}
