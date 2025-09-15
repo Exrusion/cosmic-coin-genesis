@@ -50,12 +50,12 @@ export const CosmicUniverse3D = () => {
     
     for (let i = 0; i < count; i++) {
       const theta = i * goldenAngle;
-      // Much smaller radius to keep planets closer to camera view
-      const radius = 3 + Math.sqrt(i) * 1.5; // Start at radius 3, grow slowly
+      // Increase spacing significantly between planets
+      const radius = 4 + i * 2.5; // Start at radius 4, increase by 2.5 for each planet
       const x = Math.cos(theta) * radius;
       const z = Math.sin(theta) * radius;
-      // Smaller vertical spread
-      const y = (Math.random() - 0.5) * 4; 
+      // Moderate vertical spread for 3D distribution
+      const y = (Math.random() - 0.5) * 6; 
       
       // Ensure all values are valid numbers
       if (!isNaN(x) && !isNaN(y) && !isNaN(z) && isFinite(x) && isFinite(y) && isFinite(z)) {
@@ -272,13 +272,16 @@ export const CosmicUniverse3D = () => {
       </div>
 
       {/* 3D Scene */}
-      <Canvas className="w-full h-full">
+      <Canvas 
+        className="w-full h-full" 
+        style={{ background: 'radial-gradient(ellipse at center, #0a0a0a 0%, #000000 70%, #000000 100%)' }}
+      >
         <Suspense fallback={null}>
           {/* Camera and Controls */}
           <PerspectiveCamera 
             makeDefault 
-            position={[0, 5, 12]} 
-            fov={75}
+            position={[0, 8, 20]} 
+            fov={60}
             near={0.1}
             far={1000}
           />
@@ -287,8 +290,8 @@ export const CosmicUniverse3D = () => {
             enablePan={true}
             enableZoom={true}
             enableRotate={true}
-            minDistance={5}
-            maxDistance={100}
+            minDistance={8}
+            maxDistance={150}
             autoRotate={false}
             autoRotateSpeed={0.5}
           />
