@@ -26,6 +26,7 @@ export const Planet3D = ({ position, index, lifeEvents, marketTrend, isNewPlanet
   const meshRef = useRef<THREE.Mesh>(null);
   const atmosphereRef = useRef<THREE.Mesh>(null);
   const ringRef = useRef<THREE.Mesh>(null);
+  const groupRef = useRef<THREE.Group>(null);
   
   const [stage, setStage] = useState<LifeStage>(
     isNewPlanet ? 'forming' : (Math.random() > 0.7 ? 'forming' : 'empty')
@@ -39,6 +40,11 @@ export const Planet3D = ({ position, index, lifeEvents, marketTrend, isNewPlanet
     return 'earth';
   });
   const [rotationSpeed, setRotationSpeed] = useState(Math.random() * 0.02 + 0.01);
+  
+  // Orbital parameters
+  const orbitalRadius = Math.sqrt(position[0] ** 2 + position[2] ** 2);
+  const orbitalSpeed = (0.1 + Math.random() * 0.2) / Math.max(orbitalRadius, 1); // Slower for distant planets
+  const initialAngle = Math.atan2(position[2], position[0]);
 
   // Auto-evolve new planets to show textures immediately
   useEffect(() => {
@@ -118,6 +124,17 @@ export const Planet3D = ({ position, index, lifeEvents, marketTrend, isNewPlanet
 
   // Animation loop
   useFrame((state, delta) => {
+    // Orbital motion around center
+    if (groupRef.current && orbitalRadius > 0.5) {
+      const angle = initialAngle + state.clock.elapsedTime * orbitalSpeed;
+      groupRef.current.position.x = Math.cos(angle) * orbitalRadius;
+      groupRef.current.position.z = Math.sin(angle) * orbitalRadius;
+      
+      // Keep original Y position with floating animation
+      groupRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime + index) * 0.1;
+    }
+    
+    // Planet rotation on its axis
     if (meshRef.current) {
       meshRef.current.rotation.y += rotationSpeed * delta;
     }
@@ -129,18 +146,13 @@ export const Planet3D = ({ position, index, lifeEvents, marketTrend, isNewPlanet
     if (ringRef.current && stage === 'mature') {
       ringRef.current.rotation.z += rotationSpeed * 2 * delta;
     }
-
-    // Floating animation
-    if (meshRef.current) {
-      meshRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime + index) * 0.1;
-    }
   });
 
   const size = getSize();
 
   if (stage === 'empty') {
     return (
-      <group position={position}>
+      <group ref={groupRef} position={[0, 0, 0]}>
         <Sphere ref={meshRef} args={[size, 16, 16]}>
           <meshStandardMaterial 
             color="#333333" 
@@ -158,7 +170,7 @@ export const Planet3D = ({ position, index, lifeEvents, marketTrend, isNewPlanet
   }
 
   return (
-    <group position={position}>
+    <group ref={groupRef} position={[0, 0, 0]}>
       {/* Main planet */}
       <Sphere ref={meshRef} args={[size, 32, 32]}>
         <meshStandardMaterial 
