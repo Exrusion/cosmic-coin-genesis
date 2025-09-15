@@ -46,18 +46,21 @@ export const CosmicUniverse3D = () => {
     const positions: [number, number, number][] = [];
     const goldenAngle = Math.PI * (3 - Math.sqrt(5)); // Golden angle for better distribution
     
+    console.log(`Generating positions for ${count} planets`);
+    
     for (let i = 0; i < count; i++) {
       const theta = i * goldenAngle;
-      // Significantly increase spacing - start at radius 8 and increase more rapidly
-      const radius = Math.min(8 + Math.sqrt(i) * 3.5, 50); 
+      // Much smaller radius to keep planets closer to camera view
+      const radius = 3 + Math.sqrt(i) * 1.5; // Start at radius 3, grow slowly
       const x = Math.cos(theta) * radius;
       const z = Math.sin(theta) * radius;
-      // Increase vertical spread for more 3D distribution
-      const y = (Math.random() - 0.5) * 8; 
+      // Smaller vertical spread
+      const y = (Math.random() - 0.5) * 4; 
       
       // Ensure all values are valid numbers
       if (!isNaN(x) && !isNaN(y) && !isNaN(z) && isFinite(x) && isFinite(y) && isFinite(z)) {
         positions.push([x, y, z]);
+        console.log(`Planet ${i}: position [${x.toFixed(2)}, ${y.toFixed(2)}, ${z.toFixed(2)}]`);
       }
     }
     
@@ -274,7 +277,7 @@ export const CosmicUniverse3D = () => {
           {/* Camera and Controls */}
           <PerspectiveCamera 
             makeDefault 
-            position={[0, 0, 15]} 
+            position={[0, 5, 12]} 
             fov={75}
             near={0.1}
             far={1000}
