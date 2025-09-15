@@ -55,6 +55,13 @@ export const CosmicUniverse3D = () => {
           const currentMarketCap = DexScreenerService.formatMarketCap(tokenData.marketCap);
           const change = previousMarketCap > 0 ? currentMarketCap - previousMarketCap : 0;
           
+          console.log('Market Cap Update:', {
+            raw: tokenData.marketCap,
+            formatted: currentMarketCap,
+            change,
+            timestamp: new Date().toISOString()
+          });
+          
           // Check for +5k increase to create new planets
           const marketCapIncrease = currentMarketCap - lastMajorIncrease;
           if (marketCapIncrease >= 5000 && previousMarketCap > 0) {
@@ -126,8 +133,8 @@ export const CosmicUniverse3D = () => {
     // Initial fetch
     fetchTokenData();
     
-    // Poll every 30 seconds for updates
-    const interval = setInterval(fetchTokenData, 30000);
+    // Poll every 10 seconds for updates  
+    const interval = setInterval(fetchTokenData, 10000);
     
     return () => clearInterval(interval);
   }, [TOKEN_ADDRESS, previousMarketCap, toast]);
