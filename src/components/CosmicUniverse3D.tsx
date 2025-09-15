@@ -50,10 +50,10 @@ export const CosmicUniverse3D = () => {
     
     for (let i = 0; i < count; i++) {
       const theta = i * goldenAngle;
-      const radius = Math.min(3 + Math.sqrt(i) * 1.2, 20); // Limit max radius to prevent disappearing
+      const radius = Math.min(10 + Math.sqrt(i) * 4, 100); // Much larger radius for vast space
       const x = Math.cos(theta) * radius;
       const z = Math.sin(theta) * radius;
-      const y = (Math.random() - 0.5) * 1.5; // Keep planets more centered vertically
+      const y = (Math.random() - 0.5) * 8; // Larger vertical spread
       
       // Ensure all values are valid numbers
       if (!isNaN(x) && !isNaN(y) && !isNaN(z) && isFinite(x) && isFinite(y) && isFinite(z)) {
@@ -275,30 +275,30 @@ export const CosmicUniverse3D = () => {
           {/* Camera and Controls */}
           <PerspectiveCamera 
             makeDefault 
-            position={[0, 0, 15]} 
+            position={[0, 0, 50]} 
             fov={75}
             near={0.1}
-            far={1000}
+            far={5000}
           />
           <OrbitControls 
             ref={controlsRef}
             enablePan={true}
             enableZoom={true}
             enableRotate={true}
-            minDistance={5}
-            maxDistance={50}
+            minDistance={10}
+            maxDistance={500}
             autoRotate={false}
             autoRotateSpeed={0.5}
           />
 
           {/* Lighting */}
-          <ambientLight intensity={0.4} />
-          <pointLight position={[10, 10, 10]} intensity={1.5} />
-          <pointLight position={[-10, -10, -10]} intensity={0.8} />
-          <pointLight position={[0, 15, 0]} intensity={1} />
+          <ambientLight intensity={0.3} />
+          <pointLight position={[50, 50, 50]} intensity={2} />
+          <pointLight position={[-50, -50, -50]} intensity={1.5} />
+          <pointLight position={[0, 75, 0]} intensity={1.5} />
           <directionalLight 
-            position={[5, 5, 5]} 
-            intensity={1.2}
+            position={[25, 25, 25]} 
+            intensity={1.5}
             castShadow
             shadow-mapSize-width={2048}
             shadow-mapSize-height={2048}
@@ -330,9 +330,9 @@ export const CosmicUniverse3D = () => {
             />
           ))}
 
-          {/* Nebula effects */}
-          <mesh position={[0, 0, -20]} rotation={[0, 0, 0]}>
-            <planeGeometry args={[60, 60]} />
+          {/* Nebula effects - much larger and more distant */}
+          <mesh position={[0, 0, -200]} rotation={[0, 0, 0]}>
+            <planeGeometry args={[300, 300]} />
             <meshBasicMaterial 
               color="#4A90E2" 
               transparent 
@@ -340,12 +340,21 @@ export const CosmicUniverse3D = () => {
             />
           </mesh>
           
-          <mesh position={[15, 10, -15]} rotation={[0.3, 0.3, 0]}>
-            <sphereGeometry args={[8, 16, 16]} />
+          <mesh position={[150, 100, -150]} rotation={[0.3, 0.3, 0]}>
+            <sphereGeometry args={[40, 16, 16]} />
             <meshBasicMaterial 
               color="#FF6B6B" 
               transparent 
               opacity={0.03}
+            />
+          </mesh>
+          
+          <mesh position={[-150, -100, -180]} rotation={[-0.3, -0.3, 0]}>
+            <sphereGeometry args={[35, 16, 16]} />
+            <meshBasicMaterial 
+              color="#9B59B6" 
+              transparent 
+              opacity={0.025}
             />
           </mesh>
         </Suspense>
