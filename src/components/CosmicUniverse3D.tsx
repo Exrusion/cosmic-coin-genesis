@@ -118,7 +118,7 @@ export const CosmicUniverse3D = () => {
               }));
               
               setPlanets(prev => [...prev, ...newPlanets]);
-              setTotalPlanetsBorn(prev => prev + planetsToAdd);
+              setTotalPlanetsBorn(prev => Math.max(prev + planetsToAdd, targetPlanetCount));
               
               toast({
                 title: "🪐 New Planets Born!",
@@ -126,12 +126,13 @@ export const CosmicUniverse3D = () => {
                 duration: 5000,
               });
             } else {
-              // REMOVE planets - only destroy 1 planet at a time
-              setPlanets(prev => prev.slice(0, -1));
+              // REMOVE planets - destroy excess planets gradually
+              const planetsToRemove = Math.min(currentPlanetCount - targetPlanetCount, 5); // Remove max 5 at once
+              setPlanets(prev => prev.slice(0, -planetsToRemove));
               
               toast({
-                title: "💥 Planet Destroyed!",
-                description: `Market cap fell by $5k - 1 planet destroyed`,
+                title: "💥 Planets Destroyed!",
+                description: `Market cap fell - ${planetsToRemove} planet${planetsToRemove > 1 ? 's' : ''} destroyed`,
                 duration: 5000,
               });
             }
@@ -146,7 +147,12 @@ export const CosmicUniverse3D = () => {
               isNew: false
             }));
             setPlanets(initialPlanets);
-            setTotalPlanetsBorn(targetPlanetCount); // Count initial planets as born
+            setTotalPlanetsBorn(targetPlanetCount); // Set total born to match current market cap
+            
+            console.log('Initialized planets for new token:', {
+              targetPlanetCount,
+              totalBorn: targetPlanetCount
+            });
           }
           
           // Regular life events for existing planets
