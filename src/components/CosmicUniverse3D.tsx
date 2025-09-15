@@ -104,42 +104,8 @@ export const CosmicUniverse3D = () => {
             currentPlanets: currentPlanetCount
           });
           
-          // Adjust planet count to match market cap
-          if (targetPlanetCount !== currentPlanetCount) {
-            if (targetPlanetCount > currentPlanetCount) {
-              // ADD planets
-              const planetsToAdd = targetPlanetCount - currentPlanetCount;
-              const newPositions = generatePlanetPositions(targetPlanetCount).slice(currentPlanetCount);
-              const newPlanets = newPositions.map((position, index) => ({
-                position,
-                id: `planet-${Date.now()}-${index}`,
-                isNew: true,
-                createdAt: Date.now()
-              }));
-              
-              setPlanets(prev => [...prev, ...newPlanets]);
-              setTotalPlanetsBorn(prev => Math.max(prev + planetsToAdd, targetPlanetCount));
-              
-              toast({
-                title: "🪐 New Planets Born!",
-                description: `Market cap $${currentMarketCap.toLocaleString()} = ${targetPlanetCount} planets (+${planetsToAdd})`,
-                duration: 5000,
-              });
-            } else {
-              // REMOVE planets - destroy excess planets gradually
-              const planetsToRemove = Math.min(currentPlanetCount - targetPlanetCount, 5); // Remove max 5 at once
-              setPlanets(prev => prev.slice(0, -planetsToRemove));
-              
-              toast({
-                title: "💥 Planets Destroyed!",
-                description: `Market cap fell - ${planetsToRemove} planet${planetsToRemove > 1 ? 's' : ''} destroyed`,
-                duration: 5000,
-              });
-            }
-          }
-          
-          // Initialize planets on first load if empty
-          if (planets.length === 0 && targetPlanetCount > 0) {
+          // Initialize planets on first load OR reset for new token
+          if (planets.length === 0 || (previousMarketCap === 0 && currentMarketCap > 0)) {
             const positions = generatePlanetPositions(targetPlanetCount);
             const initialPlanets = positions.map((position, index) => ({
               position,
@@ -147,12 +113,46 @@ export const CosmicUniverse3D = () => {
               isNew: false
             }));
             setPlanets(initialPlanets);
-            setTotalPlanetsBorn(targetPlanetCount); // Set total born to match current market cap
+            setTotalPlanetsBorn(targetPlanetCount); // Reset total to match current market cap
             
-            console.log('Initialized planets for new token:', {
+            console.log('Reset planets for token switch:', {
               targetPlanetCount,
               totalBorn: targetPlanetCount
             });
+          } else {
+            // Adjust planet count to match market cap for existing tracking
+            if (targetPlanetCount !== currentPlanetCount) {
+              if (targetPlanetCount > currentPlanetCount) {
+                // ADD planets
+                const planetsToAdd = targetPlanetCount - currentPlanetCount;
+                const newPositions = generatePlanetPositions(targetPlanetCount).slice(currentPlanetCount);
+                const newPlanets = newPositions.map((position, index) => ({
+                  position,
+                  id: `planet-${Date.now()}-${index}`,
+                  isNew: true,
+                  createdAt: Date.now()
+                }));
+                
+                setPlanets(prev => [...prev, ...newPlanets]);
+                setTotalPlanetsBorn(prev => Math.max(prev + planetsToAdd, targetPlanetCount));
+                
+                toast({
+                  title: "🪐 New Planets Born!",
+                  description: `Market cap $${currentMarketCap.toLocaleString()} = ${targetPlanetCount} planets (+${planetsToAdd})`,
+                  duration: 5000,
+                });
+              } else {
+                // REMOVE planets - destroy excess planets gradually
+                const planetsToRemove = Math.min(currentPlanetCount - targetPlanetCount, 5);
+                setPlanets(prev => prev.slice(0, -planetsToRemove));
+                
+                toast({
+                  title: "💥 Planets Destroyed!",
+                  description: `Market cap fell - ${planetsToRemove} planet${planetsToRemove > 1 ? 's' : ''} destroyed`,
+                  duration: 5000,
+                });
+              }
+            }
           }
           
           // Regular life events for existing planets
