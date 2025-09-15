@@ -333,31 +333,7 @@ export const CosmicUniverse3D = () => {
               isNewPlanet={planet.isNew}
             />
           ))}
-          
-          {/* Debug: Add a bright reference sphere at origin */}
-          <mesh position={[0, 0, 0]}>
-            <sphereGeometry args={[0.5, 32, 32]} />
-            <meshBasicMaterial color="#ff0000" transparent opacity={0.8} />
-          </mesh>
 
-          {/* Nebula effects */}
-          <mesh position={[0, 0, -20]} rotation={[0, 0, 0]}>
-            <planeGeometry args={[60, 60]} />
-            <meshBasicMaterial 
-              color="#4A90E2" 
-              transparent 
-              opacity={0.02}
-            />
-          </mesh>
-          
-          <mesh position={[15, 10, -15]} rotation={[0.3, 0.3, 0]}>
-            <sphereGeometry args={[8, 16, 16]} />
-            <meshBasicMaterial 
-              color="#FF6B6B" 
-              transparent 
-              opacity={0.03}
-            />
-          </mesh>
         </Suspense>
       </Canvas>
       
