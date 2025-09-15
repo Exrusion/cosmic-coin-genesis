@@ -275,16 +275,10 @@ export const CosmicUniverse3D = () => {
       <Canvas 
         className="w-full h-full" 
         style={{ background: 'radial-gradient(ellipse at center, #0a0a0a 0%, #000000 70%, #000000 100%)' }}
+        camera={{ position: [0, 8, 20], fov: 60, near: 0.1, far: 1000 }}
       >
         <Suspense fallback={null}>
-          {/* Camera and Controls */}
-          <PerspectiveCamera 
-            makeDefault 
-            position={[0, 8, 20]} 
-            fov={60}
-            near={0.1}
-            far={1000}
-          />
+          {/* Controls */}
           <OrbitControls 
             ref={controlsRef}
             enablePan={true}
