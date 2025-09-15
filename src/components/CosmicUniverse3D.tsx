@@ -142,15 +142,25 @@ export const CosmicUniverse3D = () => {
                   duration: 5000,
                 });
               } else {
-                // REMOVE planets - destroy excess planets gradually
-                const planetsToRemove = Math.min(currentPlanetCount - targetPlanetCount, 5);
-                setPlanets(prev => prev.slice(0, -planetsToRemove));
+                // REMOVE planets - destroy excess planets gradually (max 1-2 at a time)
+                const minPlanets = 2; // Always keep at least 2 planets visible
+                const maxToRemove = 2; // Never remove more than 2 planets at once
+                const safeCurrentCount = Math.max(currentPlanetCount, minPlanets);
+                const safeTargetCount = Math.max(targetPlanetCount, minPlanets);
                 
-                toast({
-                  title: "💥 Planets Destroyed!",
-                  description: `Market cap fell - ${planetsToRemove} planet${planetsToRemove > 1 ? 's' : ''} destroyed`,
-                  duration: 5000,
-                });
+                if (safeCurrentCount > safeTargetCount) {
+                  const planetsToRemove = Math.min(safeCurrentCount - safeTargetCount, maxToRemove);
+                  
+                  if (planetsToRemove > 0) {
+                    setPlanets(prev => prev.slice(0, -planetsToRemove));
+                    
+                    toast({
+                      title: "💥 Planets Destroyed!",
+                      description: `Market cap fell - ${planetsToRemove} planet${planetsToRemove > 1 ? 's' : ''} destroyed`,
+                      duration: 5000,
+                    });
+                  }
+                }
               }
             }
           }
