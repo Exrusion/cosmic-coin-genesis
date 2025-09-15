@@ -60,11 +60,11 @@ All colors MUST be HSL.
     --nebula-pink: 320 60% 60%;
     --star-glow: 50 100% 80%;
     
-    /* Gradients - Deep Black Space */
-    --gradient-cosmic: linear-gradient(135deg, hsl(var(--space-deep)), hsl(var(--nebula-purple) / 0.3), hsl(var(--space-medium)));
+    /* Gradients - Pure Black Space */
+    --gradient-cosmic: linear-gradient(135deg, hsl(0 0% 0%), hsl(0 0% 1%), hsl(0 0% 2%));
     --gradient-life: linear-gradient(90deg, hsl(var(--life-birth)), hsl(var(--life-growth)), hsl(var(--life-energy)));
     --gradient-death: linear-gradient(90deg, hsl(var(--death-fire)), hsl(var(--death-explosion)), hsl(var(--death-void)));
-    --gradient-nebula: radial-gradient(ellipse at center, hsl(var(--nebula-purple) / 0.2), hsl(var(--nebula-blue) / 0.1), transparent);
+    --gradient-nebula: radial-gradient(ellipse at center, hsl(var(--nebula-purple) / 0.05), hsl(var(--nebula-blue) / 0.03), transparent);
 
     --sidebar-background: 0 0% 3%;
     --sidebar-foreground: 240 10% 85%;

@@ -50,13 +50,13 @@ export const CosmicUniverse = () => {
   }, [marketData.marketCap]);
 
   return (
-    <div className="relative w-full h-screen overflow-hidden bg-cosmic">
+    <div className="relative w-full h-screen overflow-hidden bg-black">
       {/* Animated Star Field Background */}
       <StarField />
       
-      {/* Nebula Effects */}
-      <div className="absolute inset-0 bg-nebula opacity-30 animate-nebula-drift" />
-      <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-nebula opacity-20 rounded-full blur-3xl animate-cosmic-rotate" />
+      {/* Nebula Effects - Very Subtle */}
+      <div className="absolute inset-0 bg-nebula opacity-5 animate-nebula-drift" />
+      <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-nebula opacity-3 rounded-full blur-3xl animate-cosmic-rotate" />
       
       {/* Market Cap Display */}
       <div className="absolute top-8 left-8 z-20">
