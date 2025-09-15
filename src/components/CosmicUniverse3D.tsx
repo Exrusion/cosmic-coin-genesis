@@ -39,6 +39,7 @@ export const CosmicUniverse3D = () => {
   const [previousMarketCap, setPreviousMarketCap] = useState<number>(0);
   const [planets, setPlanets] = useState<{ position: [number, number, number], id: string, isNew?: boolean, createdAt?: number }[]>([]);
   const [lastMajorIncrease, setLastMajorIncrease] = useState<number>(0);
+  const [totalPlanetsBorn, setTotalPlanetsBorn] = useState<number>(0);
 
   // Generate planet positions in a spiral pattern for large numbers
   const generatePlanetPositions = (count: number): [number, number, number][] => {
@@ -115,6 +116,7 @@ export const CosmicUniverse3D = () => {
               }));
               
               setPlanets(prev => [...prev, ...newPlanets]);
+              setTotalPlanetsBorn(prev => prev + planetsToAdd);
               
               toast({
                 title: "🪐 New Planets Born!",
@@ -143,6 +145,7 @@ export const CosmicUniverse3D = () => {
               isNew: false
             }));
             setPlanets(initialPlanets);
+            setTotalPlanetsBorn(targetPlanetCount); // Count initial planets as born
           }
           
           // Regular life events for existing planets
@@ -219,8 +222,19 @@ export const CosmicUniverse3D = () => {
   return (
     <div className="relative w-full h-screen overflow-hidden bg-black">
       {/* Market Cap Display - 2D Overlay */}
-      <div className="absolute top-8 left-8 z-20">
+      <div className="absolute top-8 left-8 z-20 space-y-4">
         <MarketCapDisplay data={marketData} />
+        
+        {/* Planets Born Counter */}
+        <div className="bg-black/50 backdrop-blur-sm border border-white/20 rounded-lg p-4">
+          <div className="text-white/70 text-sm mb-1">Total Planets Born</div>
+          <div className="text-2xl font-bold bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
+            🪐 {totalPlanetsBorn.toLocaleString()}
+          </div>
+          <div className="text-white/50 text-xs mt-1">
+            Active: {planets.length.toLocaleString()}
+          </div>
+        </div>
       </div>
       
       {/* Instructions and Controls */}
